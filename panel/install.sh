@@ -261,7 +261,6 @@ sed -i '/^APP_ENVIRONMENT_ONLY=/d' .env
 echo "APP_ENVIRONMENT_ONLY=false" >> .env
 TIMEZONE=$(timedatectl show --property=Timezone --value)
 sed -i "s|APP_TIMEZONE=.*|APP_TIMEZONE=${TIMEZONE}|g" .env
-
 sed -i "s|MAIL_MAILER=.*|MAIL_MAILER=smtp|g" .env
 sed -i "s|MAIL_HOST=.*|MAIL_HOST=smtp.zoho.in|g" .env
 sed -i "s|MAIL_PORT=.*|MAIL_PORT=587|g" .env
@@ -270,7 +269,7 @@ sed -i "s|MAIL_PASSWORD=.*|MAIL_PASSWORD=58@S5wZuWtpdDDX|g" .env
 sed -i "s|MAIL_ENCRYPTION=.*|MAIL_ENCRYPTION=tls|g" .env
 sed -i "s|MAIL_FROM_ADDRESS=.*|MAIL_FROM_ADDRESS=free.mell@aiomarket.online|g" .env
 sed -i 's|MAIL_FROM_NAME=.*|MAIL_FROM_NAME="Nobita Cloud"|g' .env
-
+sed -i '/RECAPTCHA_ENABLED=/d' .env && echo 'RECAPTCHA_ENABLED=false' >> .env && sed -i '/RECAPTCHA_SITE_KEY=/d' .env && sed -i '/RECAPTCHA_SECRET_KEY=/d' .env && php artisan config:clear && php artisan cache:clear && php artisan view:clear && php artisan config:cache
 sed -i '/APP_NAME=/d' .env && echo 'APP_NAME="Nobita Cloud"' >> .env && php artisan config:clear && php artisan cache:clear && php artisan view:clear && php artisan config:cache && systemctl restart pteroq && systemctl restart nginx
 chown -R www-data:www-data /var/www/pterodactyl/*
 # ---------------- DONE ----------------
