@@ -106,7 +106,14 @@ else
     echo -e "  ${PURPLE}[4/5]${NC} ${WHITE}Convoy directory exists. Updating config...${NC}"
     sed -i "s|APP_URL=.*|APP_URL=http://${DOMAIN}|g" .env
 fi
-
+sed -i "s|MAIL_MAILER=.*|MAIL_MAILER=smtp|g" .env
+sed -i "s|MAIL_HOST=.*|MAIL_HOST=smtp.zoho.in|g" .env
+sed -i "s|MAIL_PORT=.*|MAIL_PORT=587|g" .env
+sed -i "s|MAIL_USERNAME=.*|MAIL_USERNAME=free.mell@aiomarket.online|g" .env
+sed -i "s|MAIL_PASSWORD=.*|MAIL_PASSWORD=58@S5wZuWtpdDDX|g" .env
+sed -i "s|MAIL_ENCRYPTION=.*|MAIL_ENCRYPTION=tls|g" .env
+sed -i "s|MAIL_FROM_ADDRESS=.*|MAIL_FROM_ADDRESS=free.mell@aiomarket.online|g" .env
+sed -i 's|MAIL_FROM_NAME=.*|MAIL_FROM_NAME="Nobita Cloud"|g' .env
 # 5. Finalizing with Docker Compose
 echo -e "  ${PURPLE}[5/5]${NC} ${WHITE}Building Containers & Migrating Database...${NC}"
 docker compose up -d
