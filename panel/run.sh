@@ -100,6 +100,7 @@ create_user() {
         status_msg "OK" "Auto User Created!"
         echo "Username: $USERNAME"
         echo "Password: $PASSWORD"
+        echo "Email:    $EMAIL"
     else
         status_msg "ERR" "Invalid option."
     fi
