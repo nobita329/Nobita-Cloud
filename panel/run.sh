@@ -68,16 +68,44 @@ create_user() {
         return
     fi
 
-    status_msg "WAIT" "Launching Artisan User Maker..."
     echo ""
-    cd /var/www/pterodactyl || exit
-    php artisan p:user:make
+    echo "1) Custom User Create"
+    echo "2) Auto Create Admin User"
+    echo ""
+    read -p "Choose option: " choice
 
-    echo ""
-    status_msg "OK" "User created successfully."
+    cd /var/www/pterodactyl || exit
+
+    if [ "$choice" = "1" ]; then
+        status_msg "WAIT" "Launching manual user creation..."
+        php artisan p:user:make
+
+    elif [ "$choice" = "2" ]; then
+        status_msg "WAIT" "Creating auto admin user..."
+
+        USERNAME="user$(openssl rand -hex 2)"
+        PASSWORD="$(openssl rand -base64 10)"
+        EMAIL="$(openssl rand -base64 4)@email.com"
+        FIRST="$(openssl rand -base64 6)"
+        LAST="$(openssl rand -base64 4)"
+        php artisan p:user:make -n \
+            --email=${EMAIL} \
+            --username=${USERNAME} \
+            --password=${PASSWORD} \
+            --admin=1 \
+            --name-first=${FIRST} \
+            --name-last=${LAST}
+
+        echo ""
+        status_msg "OK" "Auto User Created!"
+        echo "Username: $USERNAME"
+        echo "Password: $PASSWORD"
+    else
+        status_msg "ERR" "Invalid option."
+    fi
+
     pause
 }
-
 # ================= PANEL UNINSTALL =================
 uninstall_logic() {
     status_msg "WAIT" "Stopping Panel services..."
