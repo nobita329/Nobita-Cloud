@@ -98,7 +98,7 @@ echo -e "${GRAY}─────────────────────�
 step "Updating system packages..."
 # --- Dependencies ---
 apt update && apt install -y curl apt-transport-https ca-certificates gnupg unzip git tar sudo lsb-release
-
+rm -f /etc/apt/keyrings/nodesource.gpg 2>/dev/null
 # Detect OS
 OS=$(lsb_release -is | tr '[:upper:]' '[:lower:]')
 
