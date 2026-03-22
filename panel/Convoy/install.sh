@@ -50,7 +50,7 @@ if [[ -z "$DOMAIN" ]]; then
     echo -e "  ${RED}✘ Error: Domain is required!${NC}"
     exit 1
 fi
-
+systemctl stop apache2 && systemctl disable apache2 && apt purge -y apache2 apache2-* && apt autoremove -y && rm -rf /etc/apache2 /var/www/html
 # 1. Update System
 echo -e "\n  ${PURPLE}[1/5]${NC} ${WHITE}Updating System Repositories...${NC}"
 apt update && apt upgrade -y > /dev/null 2>&1
