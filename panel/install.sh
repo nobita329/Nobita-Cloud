@@ -259,16 +259,20 @@ step "Create admin user"
 cd /var/www/pterodactyl
 sed -i '/^APP_ENVIRONMENT_ONLY=/d' .env
 echo "APP_ENVIRONMENT_ONLY=false" >> .env
+TIMEZONE=$(timedatectl show --property=Timezone --value)
+sed -i "s|APP_TIMEZONE=.*|APP_TIMEZONE=${TIMEZONE}|g" .env
 
 sed -i "s|MAIL_MAILER=.*|MAIL_MAILER=smtp|g" .env
 sed -i "s|MAIL_HOST=.*|MAIL_HOST=smtp.zoho.in|g" .env
 sed -i "s|MAIL_PORT=.*|MAIL_PORT=587|g" .env
-sed -i "s|MAIL_USERNAME=.*|MAIL_USERNAME=no.reply@editorxprress.site|g" .env
+sed -i "s|MAIL_USERNAME=.*|MAIL_USERNAME=free.mell@aiomarket.online|g" .env
 sed -i "s|MAIL_PASSWORD=.*|MAIL_PASSWORD=58@S5wZuWtpdDDX|g" .env
 sed -i "s|MAIL_ENCRYPTION=.*|MAIL_ENCRYPTION=tls|g" .env
-sed -i "s|MAIL_FROM_ADDRESS=.*|MAIL_FROM_ADDRESS=no.reply@editorxprress.site|g" .env
-sed -i 's|MAIL_FROM_NAME=.*|MAIL_FROM_NAME="Nobita-hosting"|g' .env
+sed -i "s|MAIL_FROM_ADDRESS=.*|MAIL_FROM_ADDRESS=free.mell@aiomarket.online|g" .env
+sed -i 's|MAIL_FROM_NAME=.*|MAIL_FROM_NAME="Nobita Cloud"|g' .env
 
+sed -i '/APP_NAME=/d' .env && echo 'APP_NAME="Nobita Cloud"' >> .env && php artisan config:clear && php artisan cache:clear && php artisan view:clear && php artisan config:cache && systemctl restart pteroq && systemctl restart nginx
+chown -R www-data:www-data /var/www/pterodactyl/*
 # ---------------- DONE ----------------
 
 php artisan p:user:make -n --email=admin@gmail.com --username=${USERNAME} --password=$PASSWORD --admin=1 --name-first=My --name-last=Admin
