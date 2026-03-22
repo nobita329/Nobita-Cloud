@@ -253,8 +253,6 @@ systemctl enable --now pteroq.service
 ok "Queue running"
 ok "NGINX configured."
 
-clear
-step "Create admin user"
 # --- Admin User ---
 cd /var/www/pterodactyl
 sed -i '/^APP_ENVIRONMENT_ONLY=/d' .env
@@ -275,7 +273,8 @@ chown -R www-data:www-data /var/www/pterodactyl/*
 php artisan p:location:make --short=IN --long="India"
 
 # ---------------- DONE ----------------
-
+clear
+step "Create admin user"
 php artisan p:user:make -n --email=admin@gmail.com --username=${USERNAME} --password=$PASSWORD --admin=1 --name-first=My --name-last=Admin
 
 # --- FINAL DEPLOYMENT UI ---
