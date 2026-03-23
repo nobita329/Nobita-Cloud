@@ -66,7 +66,6 @@ locl-ip() {
   *)
     echo "Invalid input, skipping..."
     ;;
-esac
 }
 
 # ----pulick ip
@@ -115,7 +114,6 @@ publick-ip() {
   *)
     echo "Invalid input, skipping..."
     ;;
-esac
 }
 
 # --------------hfg--
