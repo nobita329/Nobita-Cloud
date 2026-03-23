@@ -44,9 +44,11 @@ locl-ip() {
     echo -e "  ${GRAY}├─ Service :${NC} ${WHITE}$SERVICE${NC}   ${GRAY}Status :${NC} $STATUS"
     echo -e "  ${GRAY}└─ Active  :${NC} ${GRAY}${UPTIME:-N/A}${NC}"
     echo -e "${GRAY}────────────────────────────────────────────────────────────${NC}"
-    read -p "Create Node Auto [Y/n]: " c
+    read -r -p "Create Node Auto [Y/n]: " c
+    c=$(echo "$c" | tr -d '[:space:]')
     c=${c:-y}
-    if [[ "$c" =~ ^[Yy]$ ]]; then
+
+    if [[ "$c" == "y" || "$c" == "Y" ]]; then
     DEFAULT_DOMAIN=$(curl -s ifconfig.me)
     read -p "Enter Domain [${DEFAULT_DOMAIN}]: " DOMAIN
     DOMAIN=${DOMAIN:-$DEFAULT_DOMAIN}
@@ -60,12 +62,9 @@ locl-ip() {
     fi
     NODE_NAME="Node - $NEXT_NUM"
     printf "$NODE_NAME\nVPS: $(hostname) | IP: $(curl -s ifconfig.me) | RAM: $(free -m | awk '/Mem:/ {print $2}')MB | Location: IN\n1\nhttps\n${DOMAIN}\ny\nn\nn\n99999\n0\n99999\n0\n1024\n443\n2022\n/var/lib/pterodactyl/volumes\n" | php artisan p:node:make > /dev/null 2>&1
-  n|N)
-    echo "Skipped..."
-    ;;
-  *)
-    echo "Invalid input, skipping..."
-    ;;
+    else
+      echo "Skipped..."
+    fi
 }
 
 # ----pulick ip
@@ -79,9 +78,11 @@ publick-ip() {
     echo -e "  ${GRAY}├─ Service :${NC} ${WHITE}$SERVICE${NC}   ${GRAY}Status :${NC} $STATUS"
     echo -e "  ${GRAY}└─ Active  :${NC} ${GRAY}${UPTIME:-N/A}${NC}"
     echo -e "${GRAY}────────────────────────────────────────────────────────────${NC}"
-    read -p "Create Node Auto [Y/n]: " c
+    read -r -p "Create Node Auto [Y/n]: " c
+    c=$(echo "$c" | tr -d '[:space:]')
     c=${c:-y}
-    if [[ "$c" =~ ^[Yy]$ ]]; then
+
+    if [[ "$c" == "y" || "$c" == "Y" ]]; then
     DEFAULT_DOMAIN=$(curl -s ifconfig.me)
     read -p "Enter Domain [${DEFAULT_DOMAIN}]: " DOMAIN
     DOMAIN=${DOMAIN:-$DEFAULT_DOMAIN}
@@ -108,12 +109,9 @@ publick-ip() {
     fi
     NODE_NAME="Node - $NEXT_NUM"
     printf "$NODE_NAME\nVPS: $(hostname) | IP: $(curl -s ifconfig.me) | RAM: $(free -m | awk '/Mem:/ {print $2}')MB | Location: IN\n1\nhttps\n$DOMAIN\ny\nn\nn\n99999\n0\n99999\n0\n1024\n8080\n2022\n/var/lib/pterodactyl/volumes\n" | php artisan p:node:make > /dev/null 2>&1
-  n|N)
-    echo "Skipped..."
-    ;;
-  *)
-    echo "Invalid input, skipping..."
-    ;;
+    else
+      echo "Skipped..."
+    fi
 }
 
 # --------------hfg--
