@@ -35,6 +35,93 @@ show_header() {
     echo -e "${GRAY}────────────────────────────────────────────────────────────${NC}"
 }
 # -----------crate node ---
+locl-ip() {
+    clear
+    echo -e "${PURPLE}┌──────────────────────────────────────────────────────────┐${NC}"
+    echo -e "${PURPLE}│${NC}  ${CYAN}🪽  WINGS CONTROL CENTER${NC} ${GRAY}v17.0${NC}          ${GRAY}$(date +"%H:%M")${NC}  ${PURPLE}│${NC}"
+    echo -e "${PURPLE}└──────────────────────────────────────────────────────────┘${NC}"
+    echo -e "  ${CYAN}NODE DIAGNOSTICS${NC}"
+    echo -e "  ${GRAY}├─ Service :${NC} ${WHITE}$SERVICE${NC}   ${GRAY}Status :${NC} $STATUS"
+    echo -e "  ${GRAY}└─ Active  :${NC} ${GRAY}${UPTIME:-N/A}${NC}"
+    echo -e "${GRAY}────────────────────────────────────────────────────────────${NC}"
+    read -p "Create Node Auto [Y/n]: " c
+    c=${c:-y}
+    if [[ "$c" =~ ^[Yy]$ ]]; then
+    read DOMAIN
+    DOMAIN=${DOMAIN:-$(curl -s ifconfig.me)}
+    cd /var/www/pterodactyl
+    LAST_NUM=$(php artisan p:node:list 2>/dev/null | grep -oP 'Node - \K[0-9]+' | sort -n | tail -1)
+    if [ -z "$LAST_NUM" ]; then
+     NEXT_NUM=1
+    else
+     NEXT_NUM=$((LAST_NUM + 1))
+    fi
+    NODE_NAME="Node - $NEXT_NUM"
+    printf "$NODE_NAME\nVPS: $(hostname) | IP: $(curl -s ifconfig.me) | RAM: $(free -m | awk '/Mem:/ {print $2}')MB | Location: IN\n1\nhttps\n${DOMAIN}\ny\nn\nn\n99999\n0\n99999\n0\n1024\n443\n2022\n/var/lib/pterodactyl/volumes\n" | php artisan p:node:make > /dev/null 2>&1
+    else
+    echo "Skipped..."
+    fi
+}
+
+# ----pulick ip
+
+publick-ip() {
+    clear
+    echo -e "${PURPLE}┌──────────────────────────────────────────────────────────┐${NC}"
+    echo -e "${PURPLE}│${NC}  ${CYAN}🪽  WINGS CONTROL CENTER${NC} ${GRAY}v17.0${NC}          ${GRAY}$(date +"%H:%M")${NC}  ${PURPLE}│${NC}"
+    echo -e "${PURPLE}└──────────────────────────────────────────────────────────┘${NC}"
+    echo -e "  ${CYAN}NODE DIAGNOSTICS${NC}"
+    echo -e "  ${GRAY}├─ Service :${NC} ${WHITE}$SERVICE${NC}   ${GRAY}Status :${NC} $STATUS"
+    echo -e "  ${GRAY}└─ Active  :${NC} ${GRAY}${UPTIME:-N/A}${NC}"
+    echo -e "${GRAY}────────────────────────────────────────────────────────────${NC}"
+    read -p "Create Node Auto [Y/n]: " c
+    c=${c:-y}
+    if [[ "$c" =~ ^[Yy]$ ]]; then
+    read DOMAIN
+    DOMAIN=${DOMAIN:-$(curl -s ifconfig.me)}
+    if [[ -z "$DOMAIN" ]]; then
+        echo -e "\n${R}✖ Setup aborted.${N}"
+        sleep 1
+        return
+    fi
+    echo -e "\n${Y}➜ Installing Dependencies...${N}"
+    apt update -y >/dev/null 2>&1
+    apt install -y certbot python3-certbot-nginx > /dev/null 2>&1
+    echo -e "${Y}➜ Requesting Certificate for ${W}$DOMAIN${Y}...${N}"
+    rm -rf /etc/letsencrypt/live/$DOMAIN
+    rm -rf /etc/letsencrypt/archive/$DOMAIN
+    rm -rf /etc/letsencrypt/renewal/$DOMAIN.conf
+    certbot certonly --nginx -d "$DOMAIN" --non-interactive --agree-tos --email "ssl$(tr -dc a-z0-9 </dev/urandom | head -c6)@$DOMAIN"
+    cd /var/www/pterodactyl
+    LAST_NUM=$(php artisan p:node:list 2>/dev/null | grep -oP 'Node - \K[0-9]+' | sort -n | tail -1)
+    if [ -z "$LAST_NUM" ]; then
+     NEXT_NUM=1
+    else
+     NEXT_NUM=$((LAST_NUM + 1))
+    fi
+    NODE_NAME="Node - $NEXT_NUM"
+    printf "$NODE_NAME\nVPS: $(hostname) | IP: $(curl -s ifconfig.me) | RAM: $(free -m | awk '/Mem:/ {print $2}')MB | Location: IN\n1\nhttps\n$DOMAIN\ny\nn\nn\n99999\n0\n99999\n0\n1024\n8080\n2022\n/var/lib/pterodactyl/volumes\n" | php artisan p:node:make > /dev/null 2>&1
+    else
+    echo "Skipped..."
+    fi
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# --------------hfg--
 node() {
     while true; do
         clear
@@ -50,62 +137,110 @@ node() {
 
         1)
             echo ""
-            read -p "Enter Domain (example: node.domain.com): " DOMAIN
+            publick-ip
+echo "==== Pterodactyl Auto Node System ===="
 
-            read -p "Create Node? (y/n) [y]: " CREATE
-            CREATE=${CREATE:-y}
+# ==== CHECK NODE COUNT ====
+NODE_COUNT=$(php artisan p:node:list 2>/dev/null | awk -F'|' 'NR>3 && $2+0 {count++} END {print count+0}')
 
-            if [ "$CREATE" = "y" ]; then
+if [ "$NODE_COUNT" -eq 0 ]; then
+  echo "No node found... creating one 🚀"
 
-                # ==== AUTO NUMBER ====
-                LAST_NUM=$(php artisan p:node:list 2>/dev/null | grep -oP 'Node - \K[0-9]+' | sort -n | tail -1)
-                [ -z "$LAST_NUM" ] && NEXT_NUM=1 || NEXT_NUM=$((LAST_NUM+1))
-                NODE_NAME="Node - $NEXT_NUM"
+  NODE_NAME="Node - 1"
 
-                echo "Creating Node..."
+  printf "$NODE_NAME\nVPS: $(hostname)\n1\nhttp\n$(curl -s ifconfig.me)\ny\nn\nn\n4096\n0\n20000\n0\n100\n8080\n2022\n/var/lib/pterodactyl/volumes\n" | php artisan p:node:make
 
-                printf "$NODE_NAME\nVPS: $(hostname)\n1\nhttps\n$DOMAIN\ny\nn\nn\n99999\n0\n99999\n0\n1024\n8080\n2022\n/var/lib/pterodactyl/volumes\n" | php artisan p:node:make > /dev/null 2>&1
+  NODE_ID=$(php artisan p:node:list | awk -F'|' 'NR>3 && $2+0 {gsub(/ /,"",$2); print $2}' | head -1)
 
-                # ==== GET NODE ID ====
-                NODE_ID=$(php artisan p:node:list | awk -F'|' 'NR>3 && $2+0 {gsub(/ /,"",$2); print $2}' | tail -1)
+else
+  echo "Available Nodes:"
+  
+  php artisan p:node:list | awk -F'|' 'NR>3 && $2+0 {
+  ID=$2; NAME=$4; HOST=$6;
+  gsub(/ /,"",ID);
+  gsub(/^ +| +$/,"",NAME);
+  gsub(/ /,"",HOST);
+  split(HOST,a,":");
+  PORT=a[length(a)];
+  printf "%s) %s | %s | Port:%s\n", ID, NAME, HOST, PORT
+  }'
 
-                # ==== CONFIG ====
-                mkdir -p /etc/pterodactyl
-                php artisan p:node:configuration $NODE_ID > /etc/pterodactyl/config.yml
+  echo ""
+  read -p "Select Node ID: " NODE_ID
+fi
 
-                # ==== AUTO SSL FIX ====
-                sed -i "s|ssl:.*|ssl:\n    enabled: true\n    cert: /etc/certs/wing/fullchain.pem\n    key: /etc/certs/wing/privkey.pem|g" /etc/pterodactyl/config.yml
+# ==== VALIDATION ====
+if [ -z "$NODE_ID" ]; then
+  echo "Invalid Node ❌"
+  exit 1
+fi
 
-                echo "✅ Node Created with SSL"
+# ==== CONFIG GENERATE ====
+mkdir -p /etc/pterodactyl
 
-            else
-                echo "Skipped Node Creation"
-            fi
+php artisan p:node:configuration $NODE_ID > /etc/pterodactyl/config.yml
+
+# ==== RESTART WINGS ====
+pkill wings 2>/dev/null
+wings > /dev/null 2>&1 &
+
+echo "✅ Done: Node $NODE_ID connected"
             sleep 2
         ;;
 
         2)
             echo ""
-            read -p "Enter Local IP: " IP
+            locl-ip
 
-            read -p "Create Node? (y/n) [y]: " CREATE
-            CREATE=${CREATE:-y}
+echo "==== Pterodactyl Auto Node System ===="
 
-            if [ "$CREATE" = "y" ]; then
+# ==== CHECK NODE COUNT ====
+NODE_COUNT=$(php artisan p:node:list 2>/dev/null | awk -F'|' 'NR>3 && $2+0 {count++} END {print count+0}')
 
-                LAST_NUM=$(php artisan p:node:list 2>/dev/null | grep -oP 'Node - \K[0-9]+' | sort -n | tail -1)
-                [ -z "$LAST_NUM" ] && NEXT_NUM=1 || NEXT_NUM=$((LAST_NUM+1))
-                NODE_NAME="Node - $NEXT_NUM"
+if [ "$NODE_COUNT" -eq 0 ]; then
+  echo "No node found... creating one 🚀"
 
-                printf "$NODE_NAME\nLocal VPS\n1\nhttp\n$IP\ny\nn\nn\n99999\n0\n99999\n0\n1024\n8080\n2022\n/var/lib/pterodactyl/volumes\n" | php artisan p:node:make > /dev/null 2>&1
+  NODE_NAME="Node - 1"
 
-                NODE_ID=$(php artisan p:node:list | awk -F'|' 'NR>3 && $2+0 {gsub(/ /,"",$2); print $2}' | tail -1)
+  printf "$NODE_NAME\nVPS: $(hostname)\n1\nhttp\n$(curl -s ifconfig.me)\ny\nn\nn\n4096\n0\n20000\n0\n100\n8080\n2022\n/var/lib/pterodactyl/volumes\n" | php artisan p:node:make
 
-                mkdir -p /etc/pterodactyl
-                php artisan p:node:configuration $NODE_ID > /etc/pterodactyl/config.yml
+  NODE_ID=$(php artisan p:node:list | awk -F'|' 'NR>3 && $2+0 {gsub(/ /,"",$2); print $2}' | head -1)
 
-                echo "✅ Local Node Created"
-            fi
+else
+  echo "Available Nodes:"
+  
+  php artisan p:node:list | awk -F'|' 'NR>3 && $2+0 {
+  ID=$2; NAME=$4; HOST=$6;
+  gsub(/ /,"",ID);
+  gsub(/^ +| +$/,"",NAME);
+  gsub(/ /,"",HOST);
+  split(HOST,a,":");
+  PORT=a[length(a)];
+  printf "%s) %s | %s | Port:%s\n", ID, NAME, HOST, PORT
+  }'
+
+  echo ""
+  read -p "Select Node ID: " NODE_ID
+fi
+
+# ==== VALIDATION ====
+if [ -z "$NODE_ID" ]; then
+  echo "Invalid Node ❌"
+  exit 1
+fi
+
+# ==== CONFIG GENERATE ====
+mkdir -p /etc/pterodactyl
+
+php artisan p:node:configuration $NODE_ID > /etc/pterodactyl/config.yml
+
+# ==== RESTART WINGS ====
+pkill wings 2>/dev/null
+wings > /dev/null 2>&1 &
+
+echo "✅ Done: Node $NODE_ID connected"
+
+
             sleep 2
         ;;
 
