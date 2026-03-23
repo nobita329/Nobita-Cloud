@@ -282,7 +282,7 @@ auto_setup() {
             sleep 1
             
             # Run Config Script
-            bash <(curl -fsSL https://raw.githubusercontent.com/nobita329/ptero/refs/heads/main/ptero/wings/config.sh)
+            bash <(curl -fsSL https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/wings/config.sh)
             echo ""
             echo -e "${GREEN}>> Setup Complete! Press Enter to return to menu.${NC}"
             read
