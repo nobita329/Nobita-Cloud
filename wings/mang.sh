@@ -60,9 +60,13 @@ locl-ip() {
     fi
     NODE_NAME="Node - $NEXT_NUM"
     printf "$NODE_NAME\nVPS: $(hostname) | IP: $(curl -s ifconfig.me) | RAM: $(free -m | awk '/Mem:/ {print $2}')MB | Location: IN\n1\nhttps\n${DOMAIN}\ny\nn\nn\n99999\n0\n99999\n0\n1024\n443\n2022\n/var/lib/pterodactyl/volumes\n" | php artisan p:node:make > /dev/null 2>&1
-    else
+  n|N)
     echo "Skipped..."
-    fi
+    ;;
+  *)
+    echo "Invalid input, skipping..."
+    ;;
+esac
 }
 
 # ----pulick ip
@@ -105,9 +109,13 @@ publick-ip() {
     fi
     NODE_NAME="Node - $NEXT_NUM"
     printf "$NODE_NAME\nVPS: $(hostname) | IP: $(curl -s ifconfig.me) | RAM: $(free -m | awk '/Mem:/ {print $2}')MB | Location: IN\n1\nhttps\n$DOMAIN\ny\nn\nn\n99999\n0\n99999\n0\n1024\n8080\n2022\n/var/lib/pterodactyl/volumes\n" | php artisan p:node:make > /dev/null 2>&1
-    else
+  n|N)
     echo "Skipped..."
-    fi
+    ;;
+  *)
+    echo "Invalid input, skipping..."
+    ;;
+esac
 }
 
 # --------------hfg--
