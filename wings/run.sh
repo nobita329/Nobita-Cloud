@@ -84,10 +84,9 @@ show_menu() {
     # Menu Items
     echo -e "  ${B}[1]${N} ${C}SSL Configuration    ${GR}:: (Certbot/Nginx)${N}"
     echo -e "  ${B}[2]${N} ${G}Install Wings        ${GR}:: (Nobita Script)${N}"
-    echo -e "  ${B}[3]${N} ${Y}Auto-Setup           ${GR}:: (One-Click)${N}"
-    echo -e "  ${B}[4]${N} ${Y}Manager              ${GR}:: (Wings Manager)${N}"
-    echo -e "  ${B}[5]${N} ${M}Database Manager     ${GR}:: (MySQL/MariaDB)${N}"
-    echo -e "  ${B}[6]${N} ${R}Uninstall            ${GR}:: (Remove Wings)${N}"
+    echo -e "  ${B}[3]${N} ${Y}Manager              ${GR}:: (Wings Manager)${N}"
+    echo -e "  ${B}[4]${N} ${M}Database Manager     ${GR}:: (MySQL/MariaDB)${N}"
+    echo -e "  ${B}[5]${N} ${R}Uninstall            ${GR}:: (Remove Wings)${N}"
     
     echo -e "${GR}  ──────────────────────────────────────────────────────────${N}"
     echo -e "  ${B}[0]${N} ${W}Exit System${N}"
@@ -180,10 +179,9 @@ while true; do
     case $opt in
         1) ssl_setup ;;
         2) bash <(curl -fsSL https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/wings/install.sh) ;;
-        3) bash <(curl -fsSL https://raw.githubusercontent.com/nobita329/ptero/refs/heads/main/ptero/wings/setup.sh) ;;
-        4) bash <(curl -fsSL https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/wings/mang.sh) ;;
-        5) bash <(curl -fsSL https://raw.githubusercontent.com/nobita329/ptero/refs/heads/main/ptero/wings/db.sh) ;;
-        6) uninstall_menu ;;
+        3) bash <(curl -fsSL https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/wings/mang.sh) ;;
+        4) bash <(curl -fsSL https://raw.githubusercontent.com/nobita329/ptero/refs/heads/main/ptero/wings/db.sh) ;;
+        5) uninstall_menu ;;
         0) 
            echo -e "\n${G}👋 Goodbye!${N}"
            exit 0 
