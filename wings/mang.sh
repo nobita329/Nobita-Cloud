@@ -245,13 +245,9 @@ systemctl restart wings
             sleep 2
         ;;
 
-        3)
+        3)  
             echo ""
-            echo "🚀 Starting Wings..."
-
-            pkill wings 2>/dev/null
-            systemctl enable --now wings 2>/dev/null || wings > /dev/null 2>&1 &
-
+            auto_setup
             echo "✅ Wings Running"
             sleep 2
         ;;
@@ -274,16 +270,53 @@ auto_setup() {
         echo -e "  ${GOLD}🚀 AUTO-SETUP PROTOCOLS${NC}"
         echo -e "  ${GRAY}├─ [1]${NC} Configure Node 01 ${GRAY}(Auto-Fetch)${NC}"
         echo -e "  ${GRAY}├─ [2]${NC} Configure Node 02 ${GRAY}(Manual Paste)${NC}"
-        echo -e "  ${GRAY}├─ [3]${NC} Finalize Deployment ${GRAY}(Start Node)${NC}"
         echo -e "  ${GRAY}└─ [0]${NC} Back to Master Menu"
         echo ""
         echo -ne "  ${CYAN}λ${NC} ${WHITE}Setup-Action:${NC} "
         read -r s_choice
 
         case $s_choice in
-            1) echo -e "\n  ${CYAN}➜ Running Config-01 Logic...${NC}"; sleep 2 ;;
-            2) echo -e "\n  ${CYAN}➜ Running Config-02 Logic...${NC}"; sleep 2 ;;
-            3) echo -e "\n  ${GREEN}➜ Deploying Wings Node...${NC}"; systemctl enable --now wings; sleep 2 ;;
+        1)
+            echo ""
+            echo -e "${GREEN}>> Running Auto-Setup...${NC}"
+            sleep 1
+            
+            # Run Config Script
+            bash <(curl -fsSL https://raw.githubusercontent.com/nobita329/ptero/refs/heads/main/ptero/wings/config.sh)
+            echo ""
+            echo -e "${GREEN}>> Setup Complete! Press Enter to return to menu.${NC}"
+            read
+            ;;
+        2)
+            echo ""
+            echo -e "${GREEN}>> Starting Auto-Deploy...${NC}"
+            
+            # Warning about config deletion
+            echo -e "${RED}!! This will delete /etc/pterodactyl/config.yml !!${NC}"
+            rm -f /etc/pterodactyl/config.yml
+            
+            echo ""
+            echo -e "${YELLOW}Paste your Auto-Deploy Command (starts with 'sudo wings...'):${NC}"
+            read CMD
+
+            # Verify command is not empty
+            if [ -z "$CMD" ]; then
+                echo -e "${RED}Error: No command entered.${NC}"
+            else
+                echo -e "${GREEN}>> Executing deployment...${NC}"
+                eval "$CMD"
+                
+                echo -e "${GREEN}>> Restarting Wings...${NC}"
+                systemctl restart wings
+                
+                echo -e "${GREEN}>> Fetching Manager...${NC}"
+                bash <(curl -fsSL https://raw.githubusercontent.com/nobita329/ptero/refs/heads/main/ptero/wings/Manag)
+            fi
+            
+            echo ""
+            echo -e "${GREEN}>> Deploy process finished. Press Enter to return.${NC}"
+            read
+            ;;
             0) break ;;
         esac
     done
@@ -298,7 +331,7 @@ while true; do
     echo -e "  ${GRAY}└─ [3]${NC} Stop        ${GRAY}[6]${NC} Debug Mode ${GOLD}(Manual)${NC}"
     echo ""
     echo -e "  ${PURPLE}ADVANCED TOOLS${NC}"
-    echo -e "  ${GRAY}├─ [A]${NC} ${WHITE}Auto-Setup Wizard${NC}  ${GRAY}(New)${NC}"
+    echo -e "  ${GRAY}├─ [A]${NC} ${WHITE}Auto-Setup ${NC}  ${GRAY}(New)${NC}"
     echo -e "  ${GRAY}└─ [0]${NC} ${RED}Exit Manager${NC}"
     echo ""
     echo -ne "  ${CYAN}λ${NC} ${WHITE}Master Command:${NC} "
