@@ -133,6 +133,7 @@ node() {
             cd /var/www/pterodactyl
             publick-ip
 echo "==== Pterodactyl Auto Node System ===="
+echo ""
 
 # ==== CHECK NODE COUNT ====
 NODE_COUNT=$(php artisan p:node:list 2>/dev/null | awk -F'|' 'NR>3 && $2+0 {count++} END {print count+0}')
@@ -189,6 +190,7 @@ echo "✅ Done: Node $NODE_ID connected"
             locl-ip
 
 echo "==== Pterodactyl Auto Node System ===="
+echo ""
 
 # ==== CHECK NODE COUNT ====
 NODE_COUNT=$(php artisan p:node:list 2>/dev/null | awk -F'|' 'NR>3 && $2+0 {count++} END {print count+0}')
