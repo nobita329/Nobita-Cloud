@@ -130,6 +130,7 @@ node() {
 
         1)
             echo ""
+            cd /var/www/pterodactyl
             publick-ip
 echo "==== Pterodactyl Auto Node System ===="
 
@@ -184,6 +185,7 @@ echo "✅ Done: Node $NODE_ID connected"
 
         2)
             echo ""
+            cd /var/www/pterodactyl
             locl-ip
 
 echo "==== Pterodactyl Auto Node System ===="
