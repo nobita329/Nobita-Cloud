@@ -47,8 +47,9 @@ locl-ip() {
     read -p "Create Node Auto [Y/n]: " c
     c=${c:-y}
     if [[ "$c" =~ ^[Yy]$ ]]; then
-    DOMAIN=${DOMAIN:-$(curl -s ifconfig.me)}
-    read DOMAIN
+    DEFAULT_DOMAIN=$(curl -s ifconfig.me)
+    read -p "Enter Domain [${DEFAULT_DOMAIN}]: " DOMAIN
+    DOMAIN=${DOMAIN:-$DEFAULT_DOMAIN}
 
     cd /var/www/pterodactyl
     LAST_NUM=$(php artisan p:node:list 2>/dev/null | grep -oP 'Node - \K[0-9]+' | sort -n | tail -1)
@@ -78,8 +79,9 @@ publick-ip() {
     read -p "Create Node Auto [Y/n]: " c
     c=${c:-y}
     if [[ "$c" =~ ^[Yy]$ ]]; then
-    DOMAIN=${DOMAIN:-$(curl -s ifconfig.me)}
-    read DOMAIN
+    DEFAULT_DOMAIN=$(curl -s ifconfig.me)
+    read -p "Enter Domain [${DEFAULT_DOMAIN}]: " DOMAIN
+    DOMAIN=${DOMAIN:-$DEFAULT_DOMAIN}
 
     if [[ -z "$DOMAIN" ]]; then
         echo -e "\n${R}✖ Setup aborted.${N}"
