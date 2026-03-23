@@ -172,6 +172,7 @@ php artisan p:node:configuration $NODE_ID > /etc/pterodactyl/config.yml
 # ==== RESTART WINGS ====
 pkill wings 2>/dev/null
 wings > /dev/null 2>&1 &
+systemctl restart wings
 
 echo "✅ Done: Node $NODE_ID connected"
             sleep 2
@@ -228,7 +229,9 @@ pkill wings 2>/dev/null
 wings > /dev/null 2>&1 &
 
 echo "✅ Done: Node $NODE_ID connected"
-
+sed -i "s|cert:.*|cert: /etc/certs/wing/fullchain.pem|g" /etc/pterodactyl/config.yml
+sed -i "s|key:.*|key: /etc/certs/wing/privkey.pem|g" /etc/pterodactyl/config.yml
+systemctl restart wings
 
             sleep 2
         ;;
