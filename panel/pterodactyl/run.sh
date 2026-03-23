@@ -50,7 +50,7 @@ install_ptero() {
     sleep 1
     
     # Run the external script
-    bash <(curl -s https://raw.githubusercontent.com/nobita329/hub/refs/heads/main/Codinghub/panel/pterodactyl/install.sh)
+    bash <(curl -s https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/panel/pterodactyl/install.sh)
     
     echo ""
     status_msg "OK" "Installation Sequence Complete."
