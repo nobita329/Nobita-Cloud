@@ -47,8 +47,9 @@ locl-ip() {
     read -p "Create Node Auto [Y/n]: " c
     c=${c:-y}
     if [[ "$c" =~ ^[Yy]$ ]]; then
-    read DOMAIN
     DOMAIN=${DOMAIN:-$(curl -s ifconfig.me)}
+    read DOMAIN
+
     cd /var/www/pterodactyl
     LAST_NUM=$(php artisan p:node:list 2>/dev/null | grep -oP 'Node - \K[0-9]+' | sort -n | tail -1)
     if [ -z "$LAST_NUM" ]; then
@@ -77,8 +78,9 @@ publick-ip() {
     read -p "Create Node Auto [Y/n]: " c
     c=${c:-y}
     if [[ "$c" =~ ^[Yy]$ ]]; then
-    read DOMAIN
     DOMAIN=${DOMAIN:-$(curl -s ifconfig.me)}
+    read DOMAIN
+
     if [[ -z "$DOMAIN" ]]; then
         echo -e "\n${R}✖ Setup aborted.${N}"
         sleep 1
@@ -105,21 +107,6 @@ publick-ip() {
     echo "Skipped..."
     fi
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # --------------hfg--
 node() {
