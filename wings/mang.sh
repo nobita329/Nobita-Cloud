@@ -229,6 +229,7 @@ pkill wings 2>/dev/null
 wings > /dev/null 2>&1 &
 
 echo "✅ Done: Node $NODE_ID connected"
+sed -i "s|port: 443|port: 8080|g" /etc/pterodactyl/config.yml
 sed -i "s|cert:.*|cert: /etc/certs/wing/fullchain.pem|g" /etc/pterodactyl/config.yml
 sed -i "s|key:.*|key: /etc/certs/wing/privkey.pem|g" /etc/pterodactyl/config.yml
 systemctl restart wings
