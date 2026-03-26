@@ -164,10 +164,12 @@ mariadb -e "GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'127.0.0.1' WIT
 mariadb -e "FLUSH PRIVILEGES;"
 
 cp .env.example .env
+KEY="$(openssl rand -base64 32)"
 sed -i "s|APP_URL=.*|APP_URL=https://${DOMAIN}|g" .env
 sed -i "s|DB_DATABASE=.*|DB_DATABASE=${DB_NAME}|g" .env
 sed -i "s|DB_USERNAME=.*|DB_USERNAME=${DB_USER}|g" .env
 sed -i "s|DB_PASSWORD=.*|DB_PASSWORD=${DB_PASS}|g" .env
+sed -i "s|APP_KEY=.*|APP_KEY=${KEY}|g" .env
 if ! grep -q "^APP_ENVIRONMENT_ONLY=" .env; then
     echo "APP_ENVIRONMENT_ONLY=false" >> .env
 fi
