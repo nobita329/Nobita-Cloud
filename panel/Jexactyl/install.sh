@@ -174,7 +174,6 @@ if ! grep -q "^APP_ENVIRONMENT_ONLY=" .env; then
     echo "APP_ENVIRONMENT_ONLY=false" >> .env
 fi
 COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader
-php artisan key:generate --force
 php artisan migrate --seed --force
 chown -R www-data:www-data /var/www/jexactyl/*
 apt install -y cron
