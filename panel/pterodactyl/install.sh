@@ -78,8 +78,7 @@ read PASSWORD
 PASSWORD=${PASSWORD:-admin}
 echo -ne "  ${GRAY}└─ Pterodactyl${NC} ${WHITE}(default: pterodactyl)${NC}${GRAY}:${NC} "
 read NAME
-WAB=${WAB:-pterodactyl}
-NAME="${WAB}-ptero"
+NAME=${NAME:-pterodactyl}
 # --- EXECUTION DASHBOARD ---
 echo -e "\n${PURPLE}┌──────────────────────────────────────────────────────────┐${NC}"
 echo -e "${PURPLE}│${NC}  ${CYAN}🚀 DEPLOYMENT MANIFEST${NC}                              ${PURPLE}│${NC}"
