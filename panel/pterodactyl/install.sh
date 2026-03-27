@@ -73,18 +73,21 @@ echo -e "\n  ${PURPLE}CREDENTIAL SETUP${NC}"
 echo -ne "  ${GRAY}├─ Username${NC} ${WHITE}(default: admin)${NC}${GRAY}:${NC} "
 read USERNAME
 USERNAME=${USERNAME:-admin}
-
 echo -ne "  ${GRAY}└─ Password${NC} ${WHITE}(default: admin)${NC}${GRAY}:${NC} "
 read PASSWORD
 PASSWORD=${PASSWORD:-admin}
-
+echo -ne "  ${GRAY}└─ Pterodactyl${NC} ${WHITE}(default: pterodactyl)${NC}${GRAY}:${NC} "
+read NAME
+WAB=${WAB:-pterodactyl}
+NAME="${WAB}-ptero"
 # --- EXECUTION DASHBOARD ---
 echo -e "\n${PURPLE}┌──────────────────────────────────────────────────────────┐${NC}"
 echo -e "${PURPLE}│${NC}  ${CYAN}🚀 DEPLOYMENT MANIFEST${NC}                              ${PURPLE}│${NC}"
 echo -e "${PURPLE}└──────────────────────────────────────────────────────────┘${NC}"
 echo -e "  ${GRAY}DOMAIN   :${NC} ${WHITE}$DOMAIN${NC}"
 echo -e "  ${GRAY}USER     :${NC} ${WHITE}$USERNAME${NC}"
-echo -e "  ${GRAY}PASS     :${NC} ${WHITE}********${NC}"
+echo -e "  ${GRAY}PASS     :${NC} ${WHITE}$PASSWORD${NC}"
+echo -e "  ${GRAY}/var/www/:${NC} ${WHITE}${NAME} ${NC}"
 echo -e "${GRAY}────────────────────────────────────────────────────────────${NC}"
 
 echo -e "  ${GOLD}Executing Root Protocols...${NC}"
@@ -128,15 +131,15 @@ step "Installing dependencies..."
 curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 
 # --- Download Pterodactyl Panel ---
-mkdir -p /var/www/pterodactyl
-cd /var/www/pterodactyl
+mkdir -p /var/www/${NAME}
+cd /var/www/${NAME}
 curl -Lo panel.tar.gz https://github.com/pterodactyl/panel/releases/latest/download/panel.tar.gz
 tar -xzvf panel.tar.gz
 chmod -R 755 storage/* bootstrap/cache/
 
 # --- MariaDB Setup ---
-DB_NAME=panel
-DB_USER=pterodactyl
+DB_NAME=${NAME}
+DB_USER=${NAME}
 DB_PASS=yourPassword
 mariadb -e "CREATE USER '${DB_USER}'@'127.0.0.1' IDENTIFIED BY '${DB_PASS}';"
 mariadb -e "CREATE DATABASE ${DB_NAME};"
@@ -168,17 +171,17 @@ php artisan key:generate --force
 php artisan migrate --seed --force
 
 # --- Permissions ---
-chown -R www-data:www-data /var/www/pterodactyl/*
+chown -R www-data:www-data /var/www/${NAME}/*
 apt install -y cron
 systemctl enable --now cron
-(crontab -l 2>/dev/null; echo "* * * * * php /var/www/pterodactyl/artisan schedule:run >> /dev/null 2>&1") | crontab -
+(crontab -l 2>/dev/null; echo "* * * * * php /var/www/${NAME}/artisan schedule:run >> /dev/null 2>&1") | crontab -
 sleep 1
 ok "Dependencies installed."
 step "Generating SSL certificate..."
 
 # --- Nginx Setup ---
-mkdir -p /etc/certs/panel
-cd /etc/certs/panel
+mkdir -p /etc/certs/${NAME}
+cd /etc/certs/${NAME}
 openssl req -new -newkey rsa:4096 -days 3650 -nodes -x509 \
 -subj "/C=NA/ST=NA/L=NA/O=NA/CN=Generic SSL Certificate" \
 -keyout privkey.pem -out fullchain.pem
@@ -186,7 +189,7 @@ sleep 1
 ok "SSL secured."
 step "Configuring NGINX..."
 sleep 1
-tee /etc/nginx/sites-available/pterodactyl.conf > /dev/null << EOF
+tee /etc/nginx/sites-available/${NAME}.conf > /dev/null << EOF
 server {
     listen 80;
     server_name ${DOMAIN};
@@ -197,11 +200,11 @@ server {
     listen 443 ssl http2;
     server_name ${DOMAIN};
 
-    root /var/www/pterodactyl/public;
+    root /var/www/${NAME}/public;
     index index.php;
 
-    ssl_certificate /etc/certs/panel/fullchain.pem;
-    ssl_certificate_key /etc/certs/panel/privkey.pem;
+    ssl_certificate /etc/certs/${NAME}/fullchain.pem;
+    ssl_certificate_key /etc/certs/${NAME}/privkey.pem;
 
     client_max_body_size 100m;
     client_body_timeout 120s;
@@ -226,21 +229,21 @@ server {
 }
 EOF
 
-ln -s /etc/nginx/sites-available/pterodactyl.conf /etc/nginx/sites-enabled/pterodactyl.conf || true
+ln -s /etc/nginx/sites-available/${NAME}.conf /etc/nginx/sites-enabled/${NAME}.conf || true
 nginx -t && systemctl restart nginx
 ok "Nginx online"
 
 # --- Queue Worker ---
-tee /etc/systemd/system/pteroq.service > /dev/null << 'EOF'
+tee /etc/systemd/system/${NAME}.service > /dev/null << 'EOF'
 [Unit]
-Description=Pterodactyl Queue Worker
+Description=${NAME} Queue Worker
 After=redis-server.service
 
 [Service]
 User=www-data
 Group=www-data
 Restart=always
-ExecStart=/usr/bin/php /var/www/pterodactyl/artisan queue:work --queue=high,standard,low --sleep=3 --tries=3
+ExecStart=/usr/bin/php /var/www/${NAME}/artisan queue:work --queue=high,standard,low --sleep=3 --tries=3
 RestartSec=5s
 
 [Install]
@@ -254,7 +257,7 @@ ok "Queue running"
 ok "NGINX configured."
 
 # --- Admin User ---
-cd /var/www/pterodactyl
+cd /var/www/${NAME}
 sed -i '/^APP_ENVIRONMENT_ONLY=/d' .env
 echo "APP_ENVIRONMENT_ONLY=false" >> .env
 TIMEZONE=$(timedatectl show --property=Timezone --value)
@@ -269,7 +272,7 @@ sed -i "s|MAIL_FROM_ADDRESS=.*|MAIL_FROM_ADDRESS=free.mell@aiomarket.online|g" .
 sed -i 's|MAIL_FROM_NAME=.*|MAIL_FROM_NAME="Nobita Cloud"|g' .env
 sed -i '/RECAPTCHA_ENABLED=/d' .env && echo 'RECAPTCHA_ENABLED=false' >> .env && sed -i '/RECAPTCHA_SITE_KEY=/d' .env && sed -i '/RECAPTCHA_SECRET_KEY=/d' .env && php artisan config:clear && php artisan cache:clear && php artisan view:clear && php artisan config:cache
 sed -i '/APP_NAME=/d' .env && echo 'APP_NAME="Nobita Cloud"' >> .env && php artisan config:clear && php artisan cache:clear && php artisan view:clear && php artisan config:cache && systemctl restart pteroq && systemctl restart nginx
-chown -R www-data:www-data /var/www/pterodactyl/*
+chown -R www-data:www-data /var/www/${NAME}/*
 php artisan p:location:make --short=IN --long="India"
 
 # ---------------- DONE ----------------
