@@ -273,8 +273,19 @@ sed -i '/RECAPTCHA_ENABLED=/d' .env && echo 'RECAPTCHA_ENABLED=false' >> .env &&
 sed -i '/APP_NAME=/d' .env && echo 'APP_NAME="Nobita Cloud"' >> .env && php artisan config:clear && php artisan cache:clear && php artisan view:clear && php artisan config:cache && systemctl restart pteroq && systemctl restart nginx
 chown -R www-data:www-data /var/www/${NAME}/*
 php artisan p:location:make --short=IN --long="India"
-bash <(curl -s https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/panel/pterodactyl/ui.sh)
 # ---------------- DONE ----------------
+cd /var/www/${NAME}
+php artisan down
+curl -L https://github.com/Nookure/NookTheme/releases/latest/download/panel.tar.gz | tar -xzv
+chmod -R 755 storage/* bootstrap/cache
+COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader
+php artisan view:clear
+php artisan config:clear
+php artisan migrate --seed --force
+chown -R www-data:www-data /var/www/pterodactyl/*
+php artisan queue:restart
+php artisan up
+# --- FINAL DEPLOYMENT UI ---
 clear
 step "Create admin user"
 php artisan p:user:make -n --email=admin@gmail.com --username=${USERNAME} --password=$PASSWORD --admin=1 --name-first=My --name-last=Admin
