@@ -282,7 +282,7 @@ COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader
 php artisan view:clear
 php artisan config:clear
 php artisan migrate --seed --force
-chown -R www-data:www-data /var/www/pterodactyl/*
+chown -R www-data:www-data /var/www/${NAME}/*
 php artisan queue:restart
 php artisan up
 # --- FINAL DEPLOYMENT UI ---
