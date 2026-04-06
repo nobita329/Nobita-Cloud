@@ -273,12 +273,11 @@ sed -i '/RECAPTCHA_ENABLED=/d' .env && echo 'RECAPTCHA_ENABLED=false' >> .env &&
 sed -i '/APP_NAME=/d' .env && echo 'APP_NAME="Nobita Cloud"' >> .env && php artisan config:clear && php artisan cache:clear && php artisan view:clear && php artisan config:cache && systemctl restart pteroq && systemctl restart nginx
 chown -R www-data:www-data /var/www/${NAME}/*
 php artisan p:location:make --short=IN --long="India"
-
+bash <(curl -s https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/panel/pterodactyl/ui.sh)
 # ---------------- DONE ----------------
 clear
 step "Create admin user"
 php artisan p:user:make -n --email=admin@gmail.com --username=${USERNAME} --password=$PASSWORD --admin=1 --name-first=My --name-last=Admin
-
 # --- FINAL DEPLOYMENT UI ---
 
 echo -e "\n${GREEN}┌──────────────────────────────────────────────────────────┐${NC}"
