@@ -133,6 +133,7 @@ curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/loca
 mkdir -p /var/www/${NAME}
 cd /var/www/${NAME}
 curl -Lo panel.tar.gz https://github.com/pterodactyl/panel/releases/latest/download/panel.tar.gz
+curl -Lo panel.tar.gz https://github.com/pterodactyl/panel/releases/latest/download/panel.tar.gz
 tar -xzvf panel.tar.gz
 chmod -R 755 storage/* bootstrap/cache/
 
@@ -251,7 +252,7 @@ EOF
 
 systemctl daemon-reload
 systemctl enable --now redis-server
-systemctl enable --now pteroq.service
+systemctl enable --now ${NAME}.service
 ok "Queue running"
 ok "NGINX configured."
 
