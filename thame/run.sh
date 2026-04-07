@@ -141,7 +141,7 @@ while true; do
             draw_box
             echo ""
             echo -e "${CYAN}Launching Extensions...${RESET}"
-            bash <(curl -s https://raw.githubusercontent.com/nobita329/hub/refs/heads/main/Codinghub/thames/Extensions/ext.sh)
+            bash <(curl -s https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/thame/extension.sh)
             pause
             ;;
 
