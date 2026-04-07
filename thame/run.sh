@@ -85,7 +85,7 @@ while true; do
                         if [ "$installed" = false ]; then
                             echo -e "${CYAN}Installing...${RESET}"
                             rm -f /etc/apt/keyrings/nodesource.gpg 2>/dev/null
-                            yes | bash <(curl -s https://raw.githubusercontent.com/nobita329/hub/refs/heads/main/Codinghub/thames/install.sh)
+                            yes | bash <(curl -s https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/thame/install.sh)
                         else
                             yes | blueprint -rerun-install
                         fi
