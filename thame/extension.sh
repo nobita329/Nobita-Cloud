@@ -39,7 +39,7 @@ names=(
 "simplefavicons.blueprint"
 "snowflakes.blueprint"
 "sociallogin.blueprint"
-"bstartupchanger.blueprint"
+"startupchanger.blueprint"
 "subdomains.blueprint"
 "tawkto.blueprint"
 "versionchanger.blueprint"
