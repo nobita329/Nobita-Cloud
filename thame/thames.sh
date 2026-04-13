@@ -28,7 +28,7 @@ names=(
 "amberabyss.blueprint" "catppuccindactyl.blueprint"
 "crimsonabyss.blueprint" "emeraldabyss.blueprint"
 "nightadmin.blueprint" "refreshtheme.blueprint"
-"slice.blueprint" ""
+"slice.blueprint" "darkenate.blueprint"
 )
 
 # ==========================================
