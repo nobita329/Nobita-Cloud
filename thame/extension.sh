@@ -33,7 +33,7 @@ names=(
 "snowflakes.blueprint" "sociallogin.blueprint"
 "startupchanger.blueprint" "subdomains.blueprint"
 "tawkto.blueprint" "versionchanger.blueprint"
-"pteromonaco.blueprint"
+"pteromonaco.blueprint" "urldownloader.blueprint"
 )
 
 # ==========================================
