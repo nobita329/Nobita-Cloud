@@ -41,9 +41,9 @@ names=(
 "paneladdressoverride.blueprint" "shownodeids.blueprint"
 "votifiertester.blueprint" "sidebar.blueprint"
 "translations.blueprint" "monacoeditor.blueprint"
-"minecraftplayermanager.blueprint" "subdomainmanager.blueprint"
-"" ""
-"" ""
+"minecraftpluginmanager.blueprint" "subdomainmanager.blueprint"
+"serverimporter.blueprint" "pstatistics.blueprint"
+"simplefooters.blueprint" "pullfiles.blueprint"
 "" ""
 
 )
