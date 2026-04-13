@@ -29,6 +29,9 @@ names=(
 "crimsonabyss.blueprint" "emeraldabyss.blueprint"
 "nightadmin.blueprint" "refreshtheme.blueprint"
 "slice.blueprint" "darkenate.blueprint"
+"recolor.blueprint" "bluetables.blueprint"
+"ultradarkadmin.blueprint" "xlpaneltheme.blueprint"
+"lememtheme.blueprint" ""
 )
 
 # ==========================================
