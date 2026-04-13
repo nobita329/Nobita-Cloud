@@ -23,34 +23,30 @@ trap 'echo -e "\n${R}[!] Force exit detected.${N}"; exit 1' SIGINT
 # 🧠 BLUEPRINT LIST
 # ==========================================
 names=(
-"adminauditlogs.blueprint"
-"huxregister.blueprint"
-"loader.blueprint"
-"lyrdyannounce.blueprint"
-"mclogs.blueprint"
-"mcplugins.blueprint"
-"mctools.blueprint"
-"minecraftplayermanager.blueprint"
-"playerlisting.blueprint"
-"resourcealerts.blueprint"
-"resourcemanager.blueprint"
-"serverbackgrounds.blueprint"
-"serversplitter.blueprint"
-"simplefavicons.blueprint"
-"snowflakes.blueprint"
-"sociallogin.blueprint"
-"startupchanger.blueprint"
-"subdomains.blueprint"
-"tawkto.blueprint"
-"versionchanger.blueprint"
+"adminauditlogs.blueprint" "huxregister.blueprint"
+"loader.blueprint" "lyrdyannounce.blueprint"
+"mclogs.blueprint" "mcplugins.blueprint"
+"mctools.blueprint" "minecraftplayermanager.blueprint"
+"playerlisting.blueprint" "resourcealerts.blueprint"
+"resourcemanager.blueprint" "serverbackgrounds.blueprint"
+"serversplitter.blueprint" "simplefavicons.blueprint"
+"snowflakes.blueprint" "sociallogin.blueprint"
+"startupchanger.blueprint" "subdomains.blueprint"
+"tawkto.blueprint" "versionchanger.blueprint"
 "pteromonaco.blueprint"
-""
-""
-""
-""
-""
-""
 )
+
+# ==========================================
+# 🔍 CHECK INSTALLATION STATUS
+# ==========================================
+is_installed() {
+    local slug="${1%.blueprint}"
+    if [[ -d "/var/www/pterodactyl/storage/extensions/$slug" ]]; then
+        return 0 # Installed
+    else
+        return 1 # Not Installed
+    fi
+}
 
 # ==========================================
 # ⚙️ RUN FUNCTION
@@ -58,76 +54,77 @@ names=(
 run_blueprint() {
     local NAME="$1"
     local ACTION="$2"
-
-    cd /var/www/pterodactyl || exit
+    cd /var/www/pterodactyl || { echo -e "${R}Pterodactyl directory not found!${N}"; exit 1; }
 
     if [[ "$ACTION" == "install" ]]; then
-        echo -e "\n${G}Installing ${NAME%.blueprint}...${N}"
-        wget -q "$URL/$NAME"
-        yes | blueprint -i "$NAME"
-        rm -f "$NAME"
+        echo -e "\n${G}📥 Installing ${NAME%.blueprint}...${N}"
+        wget -q "$URL/$NAME" -O "$NAME"
+        if [[ -f "$NAME" ]]; then
+            yes | blueprint -i "$NAME"
+            rm -f "$NAME"
+        else
+            echo -e "${R}❌ Download failed!${N}"
+        fi
     else
-        echo -e "\n${R}Uninstalling ${NAME%.blueprint}...${N}"
-        yes | blueprint -r "$NAME"
+        echo -e "\n${R}🗑️ Removing ${NAME%.blueprint}...${N}"
+        yes | blueprint -r "${NAME%.blueprint}"
     fi
 }
 
-# ==========================================
-# 🧬 ENCODED TITLE (OBFUSCATED)
-# ==========================================
-get_title() {
-    echo 'ICAgICAg44CCIOKAjCDigJMgTm9iaXRhLmRldiBDT05UUk9MIEhVQiDigJMg44CCICAgICAg' | base64 -d
-}
+get_title() { echo 'ICAgICAg44CCIOKAjCDigJMgTm9iaXRhLmRldiBDT05UUk9MIEhVQiDigJMg44CCICAgICAg' | base64 -d; }
 
 # ==========================================
 # 📋 HEADER
 # ==========================================
 header() {
   clear
-  echo -e "${BC}"
-  echo " ╔══════════════════════════════════════════════════════════╗"
-  echo " ║                                                          ║"
-
-  TITLE=$(get_title)
-  printf " ║${BW}%-58s${BC}║\n" "$TITLE"
-
-  echo " ║                                                          ║"
-  printf " ║${B}%-58s${BC}║\n" "     Minimal • Clean • High Performance     "
-  echo " ║                                                          ║"
-  echo " ╚══════════════════════════════════════════════════════════╝"
-  echo -e "${N}"
-
+  echo -e "${BC} ╔══════════════════════════════════════════════════════════╗${N}"
+  printf " ${BC}║${BW}%-58s${BC}║${N}\n" "$(get_title)"
+  printf " ${BC}║${B}%-58s${BC}║${N}\n" "      Minimal • Clean • High Performance      "
+  echo -e "${BC} ╚══════════════════════════════════════════════════════════╝${N}"
   echo -e " ${B}User:${N} $(whoami)  ${B}Host:${N} $(hostname)  ${B}Time:${N} $(date +'%H:%M')"
   echo -e "${C} ──────────────────────────────────────────────────────────${N}"
 }
 
 # ==========================================
-# 📋 MENU
+# 📋 MENU (TWO COLUMNS)
 # ==========================================
 show_menu() {
   header
   echo -e "${BW} SELECT AN OPTION:${N}\n"
-
+  
+  local count=0
   for i in "${!names[@]}"; do
       num=$((i+1))
       clean_name="${names[$i]%.blueprint}"
-      echo -e "  ${BG}[ $num ]${N} $clean_name"
+      
+      # Status detect karke icon set karna
+      if is_installed "$clean_name"; then
+          status="${BG}●${N}" # Green dot
+      else
+          status="${R}○${N}" # Empty circle
+      fi
+      
+      # Two columns format
+      printf "  ${BG}%2d${N} %-22s %b   " "$num" "$clean_name" "$status"
+      
+      ((count++))
+      if (( count % 2 == 0 )); then echo ""; fi
   done
 
-  echo -e ""
-  echo -e "  ${BR}[ 0 ]${N} ❌ Exit"
-  echo -e "\n${C} ──────────────────────────────────────────────────────────${N}"
+  echo -e "\n\n  ${BR} 0 ${N} Exit"
+  echo -e "${C} ──────────────────────────────────────────────────────────${N}"
 }
 
 # ==========================================
-# 🔁 LOOP
+# 🔁 MAIN LOOP
 # ==========================================
 while true; do
   show_menu
   read -p " 👉 Enter choice: " opt
 
   if [[ "$opt" == "0" ]]; then
-      echo -e "\n${M} 👋 Exit... Nobita.dev so gaya 😴${N}"
+      echo -e "\n${M} 👋 Nobita.dev is sleeping... Bye!${N}"
       exit
   fi
 
@@ -135,22 +132,30 @@ while true; do
   NAME="${names[$index]}"
 
   if [[ -z "$NAME" ]]; then
-      echo -e "\n${R} ❌ Invalid option${N}"
+      echo -e "\n${R} ❌ Invalid Option${N}"
       sleep 1
       continue
   fi
 
   clean_name="${NAME%.blueprint}"
 
+  # Sub-menu (Action selection)
   clear
-  echo -e "\n${C} ──────────────────────────────────────────────────────────${N}"
-  echo -e " ${BW} SELECT ACTION (${clean_name}):${N}\n"
+  header
+  
+  if is_installed "$clean_name"; then
+      cur_status="${BG}ALREADY INSTALLED${N}"
+  else
+      cur_status="${R}NOT INSTALLED${N}"
+  fi
 
-  echo -e "  ${BG}[ 1 ]${N} Install"
+  echo -e " ${BW}SELECTED:${N} ${BC}$clean_name${N}"
+  echo -e " ${BW}STATUS:${N}   $cur_status"
+  echo -e "${C} ──────────────────────────────────────────────────────────${N}"
+  echo -e "  ${BG}[ 1 ]${N} Install / Update"
   echo -e "  ${BR}[ 2 ]${N} Uninstall"
-  echo -e "  ${BY}[ 0 ]${N} Back"
-
-  echo -e "\n${C} ──────────────────────────────────────────────────────────${N}"
+  echo -e "  ${BY}[ 0 ]${N} Back to Menu"
+  echo -e "${C} ──────────────────────────────────────────────────────────${N}"
 
   read -p " 👉 Action: " action
 
@@ -158,7 +163,7 @@ while true; do
       1) run_blueprint "$NAME" "install" ;;
       2) run_blueprint "$NAME" "remove" ;;
       0) continue ;;
-      *) echo -e "${R}Invalid action${N}" ;;
+      *) echo -e "${R}Invalid Choice${N}" ;;
   esac
 
   echo
