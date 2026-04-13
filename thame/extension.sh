@@ -43,6 +43,13 @@ names=(
 "subdomains.blueprint"
 "tawkto.blueprint"
 "versionchanger.blueprint"
+"pteromonaco.blueprint"
+""
+""
+""
+""
+""
+""
 )
 
 # ==========================================
