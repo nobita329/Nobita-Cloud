@@ -35,6 +35,17 @@ names=(
 "tawkto.blueprint" "versionchanger.blueprint"
 "pteromonaco.blueprint" "urldownloader.blueprint"
 "consolelogs.blueprint" "laravellogs.blueprint"
+"vanillatweaks.blueprint" ""
+"" ""
+"" ""
+"" ""
+"" ""
+"" ""
+"" ""
+"" ""
+"" ""
+"" ""
+
 )
 
 # ==========================================
