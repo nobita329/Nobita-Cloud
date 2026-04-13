@@ -31,7 +31,7 @@ names=(
 "slice.blueprint" "darkenate.blueprint"
 "recolor.blueprint" "bluetables.blueprint"
 "ultradarkadmin.blueprint" "xlpaneltheme.blueprint"
-"lememtheme.blueprint" ""
+"lememtheme.blueprint" "slate.blueprint"
 )
 
 # ==========================================
