@@ -34,7 +34,7 @@ names=(
 "startupchanger.blueprint" "subdomains.blueprint"
 "tawkto.blueprint" "versionchanger.blueprint"
 "pteromonaco.blueprint" "urldownloader.blueprint"
-"consolelogs.blueprint"
+"consolelogs.blueprint" "laravellogs.blueprint"
 )
 
 # ==========================================
