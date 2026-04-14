@@ -47,7 +47,7 @@ show_banner
 ask "Panel Domain" "panel.kavo.dpdns.org" DOMAIN
 ask "Admin Email" "admin@gmail.com" EMAIL
 ask "Admin Username" "admin" USERNAME
-ask "Admin Password" "password123" PASSWORD
+ask "Admin Password" "admin" PASSWORD
 
 # --- FINAL VALIDATION LOOP ---
 echo -e "\n  ${GOLD}┌─[ REVIEW CONFIGURATION ]${NC}"
