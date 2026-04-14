@@ -1,0 +1,129 @@
+#!/bin/bash
+
+# ============================================================
+#  🗄 DATABASE AUTO-SETUP v4.0 — CHOT UI
+# ============================================================
+
+# --- COLORS ---
+CYAN='\033[38;5;51m'
+PURPLE='\033[38;5;141m'
+GRAY='\033[38;5;242m'
+WHITE='\033[38;5;255m'
+GREEN='\033[38;5;82m'
+RED='\033[38;5;196m'
+GOLD='\033[38;5;214m'
+BOLD='\033[1m'
+DIM='\033[2m'
+NC='\033[0m'
+
+# --- CHOT UI (Compact) ---
+SEP="──────────────────────────────────────────────────"
+
+chot_top() {
+    local raw="$1"
+    local stripped
+    stripped=$(echo -e "$raw" | sed 's/\x1b\[[0-9;]*m//g')
+    local len=${#stripped}
+    local pad=$(( ${#SEP} - len ))
+    [ $pad -lt 0 ] && pad=0
+    echo -e "  ${DIM}${GRAY}╭─${NC} $raw$(printf '%*s' $pad '')${DIM}${GRAY}╮${NC}"
+}
+
+chot_row() {
+    echo -e "  ${DIM}${GRAY}│${NC} $1$(printf '%*s' $(( ${#SEP} - $(echo -e "$1" | sed 's/\x1b\[[0-9;]*m//g' | wc -c) )) '')${DIM}${GRAY}│${NC}"
+}
+
+chot_end() {
+    echo -e "  ${DIM}${GRAY}╰${SEP}╯${NC}"
+}
+
+prompt() {
+    echo -ne "  ${DIM}${GRAY}│${NC} ${WHITE}▸${NC} $1 "
+}
+
+ok()  { echo -e "  ${DIM}${GRAY}│${NC} ${GREEN}✔${NC} ${WHITE}$1${NC}"; }
+info(){ echo -e "  ${DIM}${GRAY}│${NC} ${CYAN}ℹ${NC} ${DIM}$1${NC}"; }
+wait(){ echo -e "  ${DIM}${GRAY}│${NC} ${GOLD}⏳${NC} ${WHITE}$1${NC}"; }
+
+load_bar() {
+    echo -ne "  ${DIM}${GRAY}│${NC} ${CYAN}["
+    for i in {1..30}; do echo -ne "▓"; sleep 0.02; done
+    echo -e "] ${GREEN}DONE${NC}${DIM}${GRAY}│${NC}"
+}
+
+# --- HEADER ---
+clear
+host=$(hostname 2>/dev/null || echo "?")
+ip=$(hostname -I 2>/dev/null | awk '{print $1}' || echo "0.0.0.0")
+
+echo -e ""
+echo -e "  ${PURPLE}╔══════════════════════════════════════════════════╗${NC}"
+echo -e "  ${PURPLE}║${NC}  ${CYAN}🗄 DB AUTO-SETUP${NC} ${DIM}v4.0 • Chot UI${NC}          ${PURPLE}║${NC}"
+echo -e "  ${PURPLE}║${NC}  ${GRAY}$(date '+%H:%M:%S')${NC} ${GRAY}│${NC} ${WHITE}$host${NC} ${GRAY}│${NC} ${WHITE}$ip${NC}                ${PURPLE}║${NC}"
+echo -e "  ${PURPLE}╚══════════════════════════════════════════════════╝${NC}"
+echo -e ""
+
+# --- PHASE 1: CREDS ---
+chot_top "🔐 ${PURPLE}CREDENTIALS${NC}"
+echo -ne "  ${DIM}${GRAY}│${NC} ${WHITE}▸${NC} Username ${DIM}[root]${NC} → "
+read -r DB_USER; DB_USER=${DB_USER:-root}
+echo -ne "  ${DIM}${GRAY}│${NC} ${WHITE}▸${NC} Password ${DIM}[root]${NC} → "
+read -r -s DB_PASS; echo ""
+DB_PASS=${DB_PASS:-root}
+chot_end
+echo -e ""
+
+# --- PHASE 2: INSTALL ---
+chot_top "📦 ${CYAN}INSTALLATION${NC}"
+if command -v mysql >/dev/null 2>&1 || command -v mariadb >/dev/null 2>&1; then
+    ok "MariaDB already installed"
+else
+    wait "Installing MariaDB..."
+    apt update -y >/dev/null 2>&1 && apt install -y mariadb-server mariadb-client >/dev/null 2>&1
+    ok "Installed"
+fi
+systemctl enable mariadb >/dev/null 2>&1 || systemctl enable mysql >/dev/null 2>&1
+systemctl start mariadb >/dev/null 2>&1 || systemctl start mysql >/dev/null 2>&1
+ok "Service started"
+chot_end
+echo -e ""
+
+# --- PHASE 3: DB SETUP ---
+chot_top "⚡ ${GOLD}DATABASE SETUP${NC}"
+wait "Creating user '$DB_USER'..."
+SQL_EXIT=0
+sudo mysql -e "CREATE USER IF NOT EXISTS '$DB_USER'@'%' IDENTIFIED BY '$DB_PASS'; GRANT ALL PRIVILEGES ON *.* TO '$DB_USER'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;" 2>/dev/null || SQL_EXIT=$?
+[ "$SQL_EXIT" -eq 0 ] && ok "User '$DB_USER' created" || { info "Failed, using root"; DB_USER="root"; }
+chot_end
+echo -e ""
+
+# --- PHASE 4: NETWORK ---
+chot_top "🌐 ${PURPLE}NETWORK${NC}"
+CONF=""
+for f in /etc/mysql/mariadb.conf.d/50-server.cnf /etc/mysql/mysql.conf.d/mysqld.cnf /etc/mysql/my.cnf; do
+    [ -f "$f" ] && { CONF="$f"; break; }
+done
+if [ -n "$CONF" ]; then
+    info "Config: ${DIM}$CONF${NC}"
+    grep -q "^bind-address" "$CONF" 2>/dev/null && sed -i 's/^bind-address.*/bind-address = 0.0.0.0/' "$CONF" || echo "bind-address = 0.0.0.0" >> "$CONF"
+    ok "Remote access enabled (0.0.0.0)"
+fi
+systemctl restart mariadb 2>/dev/null || systemctl restart mysql 2>/dev/null || true
+ok "Service restarted"
+command -v ufw &>/dev/null && { ufw allow 3306/tcp >/dev/null 2>&1; ok "Port 3306 opened"; } || info "No UFW"
+chot_end
+echo -e ""
+
+# --- SUMMARY ---
+echo -e "  ${GREEN}${BOLD}✅ DONE${NC}"
+echo -e ""
+chot_top "${GREEN}CONNECTION INFO${NC}"
+chot_row "  ${WHITE}Host     :${NC} ${CYAN}${BOLD}$ip${NC}"
+chot_row "  ${WHITE}Port     :${NC} ${CYAN}${BOLD}3306${NC}"
+chot_row "  ${WHITE}User     :${NC} ${GREEN}${BOLD}$DB_USER${NC}"
+chot_row "  ${WHITE}Password :${NC} ${GREEN}${BOLD}$DB_PASS${NC}"
+chot_row "  ${WHITE}Remote   :${NC} ${GREEN}Enabled (0.0.0.0)${NC}"
+chot_end
+echo -e ""
+echo -e "  ${DIM}${GRAY}$(date '+%Y-%m-%d %H:%M:%S')${NC}"
+echo -e ""
