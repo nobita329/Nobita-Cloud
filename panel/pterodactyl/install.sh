@@ -262,6 +262,7 @@ chown -R www-data:www-data /var/www/pterodactyl/*
 php artisan queue:restart
 php artisan up
 # --- END REPORT ---
+clear
 php artisan p:user:make -n --email=$EMAIL --username=${USERNAME} --password=$PASSWORD --admin=1 --name-first=My --name-last=Admin
 echo -e "  $header_line"
 echo -e "\n  ${CYAN}DEPLOYMENT COMPLETE${NC}"
