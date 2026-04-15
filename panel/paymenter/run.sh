@@ -55,7 +55,7 @@ install_paymenter() {
     echo ""
     
     # Run the Paymenter install script
-    bash <(curl -s https://raw.githubusercontent.com/nobita329/hub/refs/heads/main/Codinghub/panel/paymenter/install.sh)
+    bash <(curl -s https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/panel/paymenter/install.sh)
     
     echo -e "\n  ${CHECK} ${SUCCESS}Deployment sequence finished successfully."
     echo -e "  ${SEP}"
