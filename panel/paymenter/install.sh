@@ -248,9 +248,9 @@ clear
 line
 echo -e "${C_GREEN}🎉 INSTALLATION COMPLETED SUCCESSFULLY${C_RESET}"
 line
-echo -e "${C_CYAN}🌐 Panel URL    : ${C_WHITE}https://${DOMAIN}${C_RESET}"
-echo -e "${C_CYAN}🗄 DB User      : ${C_WHITE}${DB_USER}${C_RESET}"
-echo -e "${C_CYAN}🔑 DB Password  : ${C_WHITE}${DB_PASS}${C_RESET}"
+echo -e "  ${GOLD}│${NC} ${GRAY}Domain:${NC}   $DOMAIN"
+echo -e "  ${GOLD}│${NC} ${GRAY}Email:${NC}    $EMAIL"
+echo -e "  ${GOLD}│${NC} ${GRAY}Password:${NC} $PASSWORD"
 line
 echo -e "${C_PURPLE}🚀 Panel live. Control the servers.${C_RESET}"
 line
