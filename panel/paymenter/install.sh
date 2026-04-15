@@ -142,7 +142,7 @@ php artisan key:generate --force
 php artisan storage:link
 clear
 php artisan migrate --force --seed
-php artisan db:seed --class=CustomPropertySeeder
+php artisan db:seed --class=CustomPropertySeeder --force
 apt install -y cron && systemctl enable --now cron && (crontab -l 2>/dev/null | grep -v "paymenter/artisan schedule:run"; echo "* * * * * /usr/bin/php /var/www/paymenter/artisan schedule:run >> /dev/null 2>&1") | crontab -
 mkdir -p /etc/certs/paymenter
 cd /etc/certs/paymenter
