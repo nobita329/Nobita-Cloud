@@ -228,6 +228,7 @@ cd /var/www/paymenter
 php artisan migrate --force
 php artisan tinker --execute="
 DB::table('settings')->updateOrInsert(['key'=>'company_name'], ['value'=>'Nobita Cloud']);
+DB::table('settings')->updateOrInsert(['key'=>'timezone'], ['value'=>'Asia/Kolkata']);
 DB::table('settings')->updateOrInsert(['key'=>'app_url'], ['value'=>'https://${DOMAIN}']);
 "
 php artisan config:cache
