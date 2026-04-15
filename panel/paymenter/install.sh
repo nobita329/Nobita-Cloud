@@ -48,8 +48,8 @@ show_banner
 
 # --- DATA COLLECTION ---
 ask "Panel Domain" "billing.aiomarket.online" DOMAIN
-ask "Admin Email" "admin@gmail.com" EMAIL
-ask "Admin Password" "admin" PASSWORD
+ask "Admin Email" "paymenter@gmail.com" EMAIL
+ask "Admin Password" "paymenter" PASSWORD
 
 # --- FINAL VALIDATION LOOP ---
 echo -e "\n  ${GOLD}┌─[ REVIEW CONFIGURATION ]${NC}"
