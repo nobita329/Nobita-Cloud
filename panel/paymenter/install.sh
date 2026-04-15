@@ -47,7 +47,7 @@ ask() {
 show_banner
 
 # --- DATA COLLECTION ---
-ask "Panel Domain" "panel.kavo.dpdns.org" DOMAIN
+ask "Panel Domain" "billing.aiomarket.online" DOMAIN
 ask "Admin Email" "admin@gmail.com" EMAIL
 ask "Admin Password" "admin" PASSWORD
 
