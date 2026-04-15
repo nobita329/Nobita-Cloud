@@ -9,7 +9,10 @@ GREEN='\033[38;5;82m'
 RED='\033[38;5;196m'
 GOLD='\033[38;5;214m'
 NC='\033[0m'
-
+line(){ echo -e "${C_GRAY}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${C_RESET}"; }
+step(){ echo -e "${C_BLUE}➜ $1${C_RESET}"; }
+ok(){ echo -e "${C_GREEN}✔ $1${C_RESET}"; }
+warn(){ echo -e "${C_YELLOW}⚠ $1${C_RESET}"; }
 # --- UI HELPER ---
 show_banner() {
     clear
