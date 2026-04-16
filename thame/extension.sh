@@ -44,8 +44,8 @@ names=(
 "minecraftpluginmanager.blueprint" "subdomainmanager.blueprint"
 "serverimporter.blueprint" "pstatistics.blueprint"
 "simplefooters.blueprint" "pullfiles.blueprint"
-"" ""
-
+"serverpropsmanager.blueprint" "motdmaker.blueprint"
+"servericonimporter.blueprint" ""
 )
 
 # ==========================================
