@@ -222,7 +222,7 @@ while true; do
     echo -e "${CYAN} │${NC}  ${RED}[4]${NC} Domin           ${GRAY}:: (Chang/domin/ssl)${NC}           ${CYAN}│${NC}"
     echo -e "${CYAN} │${NC}  ${RED}[5]${NC} Uninstall       ${GRAY}:: (Remove Data)${NC}           ${CYAN}│${NC}"
     echo -e "${CYAN} │${NC}                                                       ${CYAN}│${NC}"
-    echo -e "${CYAN} │${NC}  ${WHITE}[6] Exit System${NC}                                   ${CYAN}│${NC}"
+    echo -e "${CYAN} │${NC}  ${WHITE}[0] Exit System${NC}                                   ${CYAN}│${NC}"
     echo -e "${CYAN} └───────────────────────────────────────────────────────┘${NC}"
     echo ""
     echo -ne "${BOLD}${WHITE}  root@ptero:~# ${NC}"
@@ -234,7 +234,7 @@ while true; do
         3) update_panel ;;
         4) bash <(curl -fsSL https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/panel/pterodactyl/ssl.sh) ;;
         5) uninstall_ptero ;;
-        6) clear; exit ;;
+        0) clear; exit ;;
         *) echo -e "${RED}  Invalid option selected...${NC}"; sleep 1 ;;
     esac
 done
