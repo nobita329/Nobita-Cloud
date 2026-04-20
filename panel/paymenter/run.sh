@@ -217,7 +217,8 @@ while true; do
     echo -e "${CYAN} │${NC}  ${GREEN}[2]${NC} User          ${GRAY}:: (Add Admin/User)${NC}        ${CYAN}│${NC}"
     echo -e "${CYAN} │${NC}  ${YELLOW}[3]${NC} Update       ${GRAY}:: (Latest Release)${NC}        ${CYAN}│${NC}"
     echo -e "${CYAN} │${NC}  ${RED}[4]${NC} Domin           ${GRAY}:: (Chang/domin/ssl)${NC}           ${CYAN}│${NC}"
-    echo -e "${CYAN} │${NC}  ${RED}[5]${NC} Uninstall       ${GRAY}:: (Remove Data)${NC}           ${CYAN}│${NC}"
+    echo -e "${CYAN} │${NC}  ${RED}[5]${NC} Thames       ${GRAY}:: (Remove Data)${NC}           ${CYAN}│${NC}"
+    echo -e "${CYAN} │${NC}  ${RED}[6]${NC} Uninstall       ${GRAY}:: (Remove Data)${NC}           ${CYAN}│${NC}"
     echo -e "${CYAN} │${NC}                                                       ${CYAN}│${NC}"
     echo -e "${CYAN} │${NC}  ${WHITE}[0] Exit System${NC}                                   ${CYAN}│${NC}"
     echo -e "${CYAN} └───────────────────────────────────────────────────────┘${NC}"
@@ -230,7 +231,8 @@ while true; do
         2) create_user ;;
         3) update_panel ;;
         4) bash <(curl -fsSL https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/panel/pterodactyl/ssl.sh) ;;
-        5) uninstall_ptero ;;
+        5) bash <(curl -fsSL https://raw.githubusercontent.com/nobita329/Thame/refs/heads/main/run.sh) ;;
+        6) uninstall_ptero ;;
         0) clear; exit ;;
         *) echo -e "${RED}  Invalid option selected...${NC}"; sleep 1 ;;
     esac
