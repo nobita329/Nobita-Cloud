@@ -122,6 +122,7 @@ cd /var/www/paymenter
 curl -Lo paymenter.tar.gz https://github.com/paymenter/paymenter/releases/latest/download/paymenter.tar.gz
 tar -xzvf paymenter.tar.gz
 chmod -R 755 storage/* bootstrap/cache/
+chmod -R 755 storage bootstrap/cache
 DB_NAME="paymenter"
 DB_USER="paymenteruser"
 DB_PASS="yourPassword" 
