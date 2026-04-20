@@ -1,136 +1,240 @@
 #!/bin/bash
 
-# ——————————————————————————————————————————————————
-# PAYMENTER CONTROL PANEL - 2026 EDITION
-# High-Contrast UI • Modular • Performance Optimized
-# ——————————————————————————————————————————————————
+# ====================================================
+#       PTERODACTYL CONTROL CENTER v2.1
+# ====================================================
 
-# Color definitions (High Intensity & 256-bit)
-NC='\033[0m'
+# --- COLORS & STYLING ---
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+PURPLE='\033[0;35m'
+CYAN='\033[0;36m'
+WHITE='\033[0;37m'
 BOLD='\033[1m'
-BLACK='\033[0;30m'
-RED='\033[38;5;196m'
-GREEN='\033[38;5;82m'
-YELLOW='\033[38;5;226m'
-BLUE='\033[38;5;75m'
-MAGENTA='\033[38;5;170m'
-CYAN='\033[38;5;51m'
-WHITE='\033[38;5;255m'
-GRAY='\033[38;5;244m'
+NC='\033[0m'
 
-# UI Elements
-SEP="${GRAY}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-CHECK="${GREEN}✔${NC}"
-INFO="${BLUE}ℹ${NC}"
-WARN="${YELLOW}⚠${NC}"
-ERR="${RED}✖${NC}"
+# --- UI HELPER FUNCTIONS ---
 
 show_header() {
     clear
-    echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${BLUE}║${NC}  ${BOLD}${WHITE}🚀 PAYMENTER CONTROL PANEL${NC}                     ${GRAY}v2.0${NC}  ${BLUE}║${NC}"
-    echo -e "${BLUE}╠════════════════════════════════════════════════════════════╣${NC}"
-    echo -e "${BLUE}║${NC}  ${GRAY}Managed by:${NC} ${MAGENTA}The Coding Hub${NC}      ${GRAY}Status:${NC} ${GREEN}System Online${NC} ${BLUE}║${NC}"
-    echo -e "${BLUE}╚════════════════════════════════════════════════════════════╝${NC}"
-}
-
-show_menu() {
-    echo -e "  ${BOLD}${WHITE}MAIN NAVIGATION${NC}"
-    echo -e "  ${GRAY}Select an operation to continue:${NC}"
+    echo -e "${PURPLE}════════════════════════════════════════════════════════════${NC}"
+    echo -e "${PURPLE}║${NC}         ${BOLD}${WHITE}PTERODACTYL SERVER MANAGEMENT SYSTEM${NC}             ${PURPLE}║${NC}"
+    echo -e "${PURPLE}════════════════════════════════════════════════════════════${NC}"
+    echo -e "${CYAN}  Current Module: ${YELLOW}$1${NC}"
+    echo -e "${PURPLE}────────────────────────────────────────────────────────────${NC}"
     echo ""
-    echo -e "  ${CYAN}1.${NC} ${WHITE}📥 Install ${NC}       ${GRAY}(New Instance)${NC}"
-    echo -e "  ${CYAN}2.${NC} ${WHITE}🔄 Update ${NC}        ${GRAY}(Patch System)${NC}"
-    echo -e "  ${CYAN}3.${NC} ${WHITE}🗑️ Uninstall${NC}      ${RED}(Destructive)${NC}"
-    echo -e "  ${CYAN}4.${NC} ${WHITE}❌ Exit${NC}"
+}
+
+status_msg() {
+    # $1 = Type (OK, ERR, INFO, WAIT), $2 = Message
+    case $1 in
+        "OK")   echo -e "  [${GREEN} ✔ ${NC}] $2" ;;
+        "ERR")  echo -e "  [${RED} ✘ ${NC}] $2" ;;
+        "INFO") echo -e "  [${CYAN} ➜ ${NC}] $2" ;;
+        "WAIT") echo -e "  [${YELLOW} ⏳ ${NC}] $2" ;;
+    esac
+}
+
+pause() {
     echo ""
-    echo -e "${SEP}"
+    read -p "  Press [Enter] to return to main menu..."
 }
 
-install_paymenter() {
-    echo -e "\n  ${BLUE}${BOLD}[ DEPLOYMENT STARTED ]${NC}"
-    echo -e "  ${SEP}"
-    echo -e "  ${INFO} Starting environment check..."
-    echo -e "  ${INFO} Configuring ad-blocker filters..."
-    echo -e "  ${INFO} Pulling latest Paymenter build..."
+# ================== INSTALL FUNCTION ==================
+install_ptero() {
+    show_header "PANEL INSTALLATION"
+    
+    status_msg "INFO" "Initiating installation script..."
+    sleep 1
+    
+    # Run the external script
+    bash <(curl -s https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/panel/pterodactyl/install.sh)
+    
     echo ""
-    
-    # Run the Paymenter install script
-    bash <(curl -s https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/panel/paymenter/install.sh)
-    
-    echo -e "\n  ${CHECK} ${SUCCESS}Deployment sequence finished successfully."
-    echo -e "  ${SEP}"
+    status_msg "OK" "Installation Sequence Complete."
+    pause
 }
 
-uninstall_paymenter() {
-    echo -e "\n  ${RED}${BOLD}[ REMOVAL IN PROGRESS ]${NC}"
-    echo -e "  ${SEP}"
-    
-    echo -en "  ${WARN} Cleaning files... "
-    sudo rm -rf /var/www/paymenter && echo -e "${CHECK}"
-    
-    echo -en "  ${WARN} Dropping databases... "
-    sudo mysql -u root -e "DROP DATABASE IF EXISTS paymenter; DROP USER IF EXISTS 'paymenteruser'@'127.0.0.1'; FLUSH PRIVILEGES;" 2>/dev/null && echo -e "${CHECK}"
-    
-    echo -en "  ${WARN} Clearing Cron & Services... "
-    sudo crontab -l | grep -v 'artisan schedule:run' | sudo crontab - 2>/dev/null
-    sudo rm -f /etc/systemd/system/paymenter.service && echo -e "${CHECK}"
-    
-    echo -en "  ${WARN} Removing Nginx Configs... "
-    sudo rm -f /etc/nginx/sites-enabled/paymenter.conf /etc/nginx/sites-available/paymenter.conf
-    sudo rm -rf /etc/nginx/adblock /etc/nginx/conf.d/adblock.conf
-    sudo systemctl reload nginx || true
-    echo -e "${CHECK}"
-    
-    echo -e "\n  ${CHECK} ${RED}System has been purged.${NC}"
-    echo -e "  ${SEP}"
-}
+# ================== CREATE USER ==================
+create_user() {
+    show_header "USER MANAGEMENT"
 
-update_paymenter() {
-    echo -e "\n  ${YELLOW}${BOLD}[ SYSTEM UPDATE ]${NC}"
-    echo -e "  ${SEP}"
-    
-    if [ ! -d "/var/www/paymenter" ]; then
-        echo -e "  ${ERR} ${RED}Error: Paymenter directory not found!${NC}"
+    if [ ! -d /var/www/paymenter ]; then
+        status_msg "ERR" "Panel directory not found (/var/www/pterodactyl)."
+        status_msg "ERR" "Please install the panel first."
+        pause
         return
     fi
-    
-    echo -e "  ${INFO} Accessing /var/www/paymenter..."
-    cd /var/www/paymenter
-    echo -e "  ${INFO} Running artisan upgrade..."
-    php artisan app:upgrade
-    
-    echo -e "\n  ${CHECK} ${GREEN}Update completed successfully.${NC}"
-    echo -e "  ${SEP}"
+
+    echo ""
+    echo "1) Custom User Create"
+    echo "2) Auto Create Admin User"
+    echo ""
+    read -p "Choose option: " choice
+
+    cd /var/www/pterodactyl || exit
+
+    if [ "$choice" = "1" ]; then
+        status_msg "WAIT" "Launching manual user creation..."
+        php artisan p:user:make
+
+    elif [ "$choice" = "2" ]; then
+        status_msg "WAIT" "Creating auto admin user..."
+
+        USERNAME="user$(openssl rand -hex 2)"
+        PASSWORD="$(openssl rand -base64 10)"
+        EMAIL="$(openssl rand -base64 4)@email.com"
+        FIRST="$(openssl rand -base64 6)"
+        LAST="$(openssl rand -base64 4)"
+        php artisan p:user:make -n \
+            --email=${EMAIL} \
+            --username=${USERNAME} \
+            --password=${PASSWORD} \
+            --admin=1 \
+            --name-first=${FIRST} \
+            --name-last=${LAST}
+
+        echo ""
+        status_msg "OK" "Auto User Created!"
+        echo "Username: $USERNAME"
+        echo "Password: $PASSWORD"
+        echo "Email:    $EMAIL"
+    else
+        status_msg "ERR" "Invalid option."
+    fi
+
+    pause
+}
+# ================= PANEL UNINSTALL =================
+uninstall_logic() {
+    status_msg "WAIT" "Stopping Panel services..."
+    systemctl stop pteroq.service 2>/dev/null || true
+    systemctl disable pteroq.service 2>/dev/null || true
+    rm -f /etc/systemd/system/pteroq.service
+    systemctl daemon-reload
+
+    status_msg "WAIT" "Removing cronjobs..."
+    crontab -l | grep -v 'php /var/www/paymenter/artisan schedule:run' | crontab - || true
+
+    status_msg "WAIT" "Deleting panel files..."
+    rm -rf /var/www/paymenter
+
+    status_msg "WAIT" "Dropping database and users..."
+    mysql -u root -e "DROP DATABASE IF EXISTS paymenter;"
+    mysql -u root -e "DROP USER IF EXISTS 'paymenter'@'127.0.0.1';"
+    mysql -u root -e "FLUSH PRIVILEGES;"
+
+    status_msg "WAIT" "Cleaning Nginx configs..."
+    rm -f /etc/nginx/sites-enabled/paymenter.conf
+    rm -f /etc/nginx/sites-available/paymenter.conf
+    systemctl reload nginx || true
 }
 
-# Main Loop Execution
-while true; do
-    show_header
-    show_menu
+uninstall_ptero() {
+    show_header "UNINSTALLATION"
     
-    echo -en "  ${BOLD}${BLUE}➤ Option:${NC} "
-    read option
-    
-    case $option in
-        1) install_paymenter ;;
-        2) update_paymenter ;;
-        3) 
-            echo -en "  ${RED}${BOLD}ARE YOU SURE? (y/n):${NC} "
-            read confirm
-            [[ "$confirm" == [yY] ]] && uninstall_paymenter || echo -e "  ${INFO} Cancelled."
-            ;;
-        4)
-            echo -e "\n  ${BLUE}Connection closed. Goodbye!${NC}\n"
-            exit 0
-            ;;
-        *)
-            echo -e "  ${ERR} ${RED}Invalid selection. Try 1-4.${NC}"
-            sleep 1
-            continue
-            ;;
-    esac
+    echo -e "${RED}  WARNING: This will delete all panel data and databases!${NC}"
+    read -p "  Are you sure you want to proceed? (y/N): " confirm
+    if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
+        status_msg "INFO" "Uninstallation cancelled."
+        pause
+        return
+    fi
+
+    echo ""
+    uninstall_logic
     
     echo ""
-    echo -en "  ${GRAY}Press [ENTER] to return to menu...${NC}"
-    read
+    status_msg "OK" "Panel removed successfully (Wings untouched)."
+    pause
+}
+
+# ================= UPDATE FUNCTION =================
+update_panel() {
+    show_header "SYSTEM UPDATE"
+
+    if [ ! -d /var/www/pterodactyl ]; then
+        status_msg "ERR" "Panel not found in /var/www/pterodactyl"
+        pause
+        return
+    fi
+
+    status_msg "INFO" "Putting panel into Maintenance Mode..."
+    cd /var/www/pterodactyl
+    php artisan down
+    sudo rm -rf /var/www/pterodactyl/*
+    cd /var/www/pterodactyl
+    status_msg "INFO" "Downloading latest release..."
+    curl -Lo panel.tar.gz https://github.com/pterodactyl/panel/releases/latest/download/panel.tar.gz
+    tar -xzvf panel.tar.gz
+    status_msg "INFO" "Setting permissions..."
+    chmod -R 755 storage/* bootstrap/cache/
+
+    status_msg "INFO" "Updating Composer dependencies..."
+    COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader
+    
+    status_msg "INFO" "Clearing cache and database migration..."
+    php artisan view:clear
+    php artisan config:clear
+    php artisan migrate --seed --force
+    chown -R www-data:www-data /var/www/pterodactyl/*
+    
+    status_msg "INFO" "Restarting Queue Workers..."
+    php artisan queue:restart
+    php artisan up
+
+    echo ""
+    status_msg "OK" "Panel Updated Successfully."
+    pause
+}
+
+# ===================== MAIN MENU =====================
+while true; do
+    clear
+    
+    # Banner
+    echo -e "${CYAN}   ___                         _           ${NC}"
+    echo -e "${CYAN} | _ \__ _ _  _ _ __  ___ _ _| |_ ___ _ _ ${NC}"
+    echo -e "${CYAN} |  _/ _\` | || | '  \/ -_) ' \  _/ -_) '_|${NC}"
+    echo -e "${CYAN} |_| \__,_|\_, |_|_|_\___|_||_\__\___|_|  ${NC}"
+    echo -e "${CYAN}           |__/                           ${NC}"
+    echo -e ""
+    echo -e "${GREEN}    P A Y M E N T E R   M A N A G E R${NC}"
+    echo -e ""
+    echo -e "${CYAN} ┌───────────────────────────────────────────────────────┐${NC}"
+
+    # --- CHECK INSTALL STATUS ---
+    if [ -d "/var/www/paymenter" ]; then
+        # Green "INSTALLED" message
+        echo -e "${CYAN} │${NC} ${BOLD}${WHITE}PANEL STATUS:${NC} ${GREEN}INSTALLED ✔${NC}                                 ${CYAN}│${NC}"
+    else
+        # Red "NOT INSTALLED" message
+        echo -e "${CYAN} │${NC} ${BOLD}${WHITE}PANEL STATUS:${NC} ${RED}NOT INSTALLED ✘${NC}                             ${CYAN}│${NC}"
+    fi
+
+    echo -e "${CYAN} ├───────────────────────────────────────────────────────┤${NC}"
+    echo -e "${CYAN} │${NC}                                                       ${CYAN}│${NC}"
+    echo -e "${CYAN} │${NC}  ${GREEN}[1]${NC} Install       ${GRAY}:: (Fresh Install)${NC}          ${CYAN}│${NC}"
+    echo -e "${CYAN} │${NC}  ${GREEN}[2]${NC} User          ${GRAY}:: (Add Admin/User)${NC}        ${CYAN}│${NC}"
+    echo -e "${CYAN} │${NC}  ${YELLOW}[3]${NC} Update       ${GRAY}:: (Latest Release)${NC}        ${CYAN}│${NC}"
+    echo -e "${CYAN} │${NC}  ${RED}[4]${NC} Domin           ${GRAY}:: (Chang/domin/ssl)${NC}           ${CYAN}│${NC}"
+    echo -e "${CYAN} │${NC}  ${RED}[5]${NC} Uninstall       ${GRAY}:: (Remove Data)${NC}           ${CYAN}│${NC}"
+    echo -e "${CYAN} │${NC}                                                       ${CYAN}│${NC}"
+    echo -e "${CYAN} │${NC}  ${WHITE}[0] Exit System${NC}                                   ${CYAN}│${NC}"
+    echo -e "${CYAN} └───────────────────────────────────────────────────────┘${NC}"
+    echo ""
+    echo -ne "${BOLD}${WHITE}  root@ptero:~# ${NC}"
+    read choice
+
+    case $choice in
+        1) install_ptero ;;
+        2) create_user ;;
+        3) update_panel ;;
+        4) bash <(curl -fsSL https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/panel/pterodactyl/ssl.sh) ;;
+        5) uninstall_ptero ;;
+        0) clear; exit ;;
+        *) echo -e "${RED}  Invalid option selected...${NC}"; sleep 1 ;;
+    esac
 done
