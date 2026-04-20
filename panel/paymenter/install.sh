@@ -9,23 +9,19 @@ GREEN='\033[38;5;82m'
 RED='\033[38;5;196m'
 GOLD='\033[38;5;214m'
 NC='\033[0m'
-line(){ echo -e "${C_GRAY}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${C_RESET}"; }
-step(){ echo -e "${C_BLUE}➜ $1${C_RESET}"; }
-ok(){ echo -e "${C_GREEN}✔ $1${C_RESET}"; }
-warn(){ echo -e "${C_YELLOW}⚠ $1${C_RESET}"; }
+
 # --- UI HELPER ---
 show_banner() {
     clear
     echo -e "${CYAN}"
     cat << "EOF"
-    ____                             __            
-   / __ \____ ___  ______ ___  ___  / /____  _____ 
-  / /_/ / __ `/ / / / __ `__ \/ _ \/ __/ _ \/ ___/ 
- / ____/ /_/ / /_/ / / / / / /  __/ /_/  __/ /     
-/_/    \__,_/\__, /_/ /_/ /_/\___/\__/\___/_/      
-            /____/
+  ___                         _           
+ | _ \__ _ _  _ _ __  ___ _ _| |_ ___ _ _ 
+ |  _/ _` | || | '  \/ -_) ' \  _/ -_) '_|
+ |_| \__,_|\_, |_|_|_\___|_||_\__\___|_|  
+           |__/                           
 EOF
-    echo -e "           ${WHITE}PREMIUM PTERODACTYL INSTALLER${NC}"
+    echo -e "${GREEN}            P A Y M E N T E R   M A N A G E R${NC}"
     echo -e "${GRAY}────────────────────────────────────────────────────────────${NC}"
 }
 
@@ -55,7 +51,7 @@ ask "Admin Password" "paymenter" PASSWORD
 echo -e "\n  ${GOLD}┌─[ REVIEW CONFIGURATION ]${NC}"
 echo -e "  ${GOLD}│${NC} ${GRAY}Domain:${NC}   $DOMAIN"
 echo -e "  ${GOLD}│${NC} ${GRAY}Email:${NC}    $EMAIL"
-echo -e "  ${GOLD}│${NC} ${GRAY}Password:${NC} $PASSWORD"
+echo -e "  ${GOLD}│${NC} ${GRAY}User:${NC}     $USERNAME"
 echo -e "  ${GOLD}└───────────────────────────${NC}"
 
 while true; do
@@ -86,11 +82,9 @@ for step in "${steps[@]}"; do
     sleep 1
     echo -e " ${GREEN}[COMPLETE]${NC}"
 done
-
 echo -e "${GRAY}────────────────────────────────────────────────────────────${NC}"
 echo -e "  ${CYAN}SUCCESS:${NC} ${WHITE}Panel is live at http://$DOMAIN${NC}"
 
-# --- Dependencies ---
 apt update && apt install -y curl apt-transport-https ca-certificates gnupg unzip git tar sudo lsb-release
 # Detect OS
 OS=$(lsb_release -is | tr '[:upper:]' '[:lower:]')
@@ -111,36 +105,28 @@ echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://pack
 apt update
 # --- Install PHP + extensions ---
 apt install -y php8.3 php8.3-{cli,fpm,common,mysql,mbstring,bcmath,xml,zip,curl,gd,tokenizer,ctype,simplexml,dom} mariadb-server nginx redis-server
-apt purge -y apache2* || true && apt autoremove -y && rm -rf /etc/apache2 /var/log/apache2
-# Start installation
-print_header
-systemctl start mariadb
-#======================================================================================================================
+# ================================ Creating the directory ============================
 mkdir /var/www/paymenter
 cd /var/www/paymenter
 curl -Lo paymenter.tar.gz https://github.com/paymenter/paymenter/releases/latest/download/paymenter.tar.gz
 tar -xzvf paymenter.tar.gz
 chmod -R 755 storage/* bootstrap/cache/
-chmod -R 755 storage bootstrap/cache
+# ================================ Creating the database ============================
 DB_NAME="paymenter"
-DB_USER="paymenteruser"
-DB_PASS="yourPassword" 
+DB_USER="paymenter"
+DB_PASS="paymenter" 
 mysql -e "CREATE USER '${DB_USER}'@'127.0.0.1' IDENTIFIED BY '${DB_PASS}';"
 mysql -e "CREATE DATABASE ${DB_NAME};"
 mysql -e "GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'127.0.0.1' WITH GRANT OPTION;"
 mysql -e "FLUSH PRIVILEGES;"
-print_success "Database '${DB_NAME}' created with user '${DB_USER}'"
-print_status "Configuring environment variables..."
+# ================================ Setting up .env ============================
 cp -n .env.example .env
 # Replace common keys (only if patterns exist)
-sed -i "s|^APP_URL=.*|APP_URL=https://${DOMAIN}|g" .env || true
 sed -i "s|^DB_DATABASE=.*|DB_DATABASE=${DB_NAME}|g" .env || true
 sed -i "s|^DB_USERNAME=.*|DB_USERNAME=${DB_USER}|g" .env || true
 sed -i "s|^DB_PASSWORD=.*|DB_PASSWORD=${DB_PASS}|g" .env || true
-print_success "Environment configuration completed"
 php artisan key:generate --force
 php artisan storage:link
-clear
 php artisan migrate --force --seed
 php artisan db:seed --class=CustomPropertySeeder --force
 apt install -y cron && systemctl enable --now cron && (crontab -l 2>/dev/null | grep -v "paymenter/artisan schedule:run"; echo "* * * * * /usr/bin/php /var/www/paymenter/artisan schedule:run >> /dev/null 2>&1") | crontab -
@@ -149,7 +135,6 @@ cd /etc/certs/paymenter
 openssl req -new -newkey rsa:4096 -days 3650 -nodes -x509 \
 -subj "/C=NA/ST=NA/L=NA/O=NA/CN=Generic SSL Certificate" \
 -keyout privkey.pem -out fullchain.pem
-
 tee /etc/nginx/sites-available/paymenter.conf > /dev/null << EOF
 server {
     listen 80;
@@ -193,13 +178,11 @@ server {
     sendfile off;
 }
 EOF
-
-sudo ln -s /etc/nginx/sites-available/paymenter.conf /etc/nginx/sites-enabled/ || true
 sudo rm /etc/nginx/sites-enabled/default
+sudo ln -s /etc/nginx/sites-available/paymenter.conf /etc/nginx/sites-enabled/ || true
 nginx -t && systemctl restart nginx
 chown -R www-data:www-data /var/www/paymenter/*
-ok "Nginx online"
-# --- Queue Worker ---
+# ================================ Creating service ============================
 tee /etc/systemd/system/paymenter.service > /dev/null << 'EOF'
 [Unit]
 Description=Paymenter Queue Worker
@@ -220,11 +203,8 @@ WantedBy=multi-user.target
 EOF
 sudo systemctl enable --now paymenter.service
 sudo systemctl enable --now redis-server
-ok "Queue running"
-
-step "Create admin user"
+# ================================ setup service ============================
 cd /var/www/paymenter
-# ---------------- SETUP ----------------
 php artisan migrate --force
 php artisan tinker --execute="
 DB::table('settings')->updateOrInsert(['key'=>'company_name'], ['value'=>'Nobita Cloud']);
@@ -243,18 +223,33 @@ php artisan tinker --execute="\App\Models\User::create([
 'role_id'=>1,
 'is_admin'=>1
 ]);"
-
-# ---------------- DONE ----------------
+# ================================ setup dn ============================
 clear
-line
-echo -e "${C_GREEN}🎉 INSTALLATION COMPLETED SUCCESSFULLY${C_RESET}"
-line
-echo -e "  ${GOLD}│${NC} ${GRAY}Domain:${NC}   $DOMAIN"
-echo -e "  ${GOLD}│${NC} ${GRAY}Email:${NC}    $EMAIL"
-echo -e "  ${GOLD}│${NC} ${GRAY}Password:${NC} $PASSWORD"
-line
-echo -e "${C_PURPLE}🚀 Panel live. Control the servers.${C_RESET}"
-line
+echo -e "  $header_line"
+echo -e "\n  ${CYAN}DEPLOYMENT COMPLETE${NC}"
+echo -e "  ${GRAY}Panel URL :${NC} ${WHITE}http://$DOMAIN${NC}"
+echo -e "  ${GRAY}Password  :${NC} ${WHITE}$PASSWORD${NC}"
+echo -e "  ${GRAY}Email     :${NC} ${WHITE}$EMAIL${NC}"
+# Cleaned up the closing message
+echo -e "\n  ${PURPLE}Enjoy your new Pterodactyl Panel!${NC}"
+echo -e "${GRAY}────────────────────────────────────────────────────────────${NC}"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
