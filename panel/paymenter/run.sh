@@ -62,7 +62,7 @@ create_user() {
     show_header "USER MANAGEMENT"
 
     if [ ! -d /var/www/paymenter ]; then
-        status_msg "ERR" "Panel directory not found (/var/www/pterodactyl)."
+        status_msg "ERR" "Panel directory not found (/var/www/paymenter)."
         status_msg "ERR" "Please install the panel first."
         pause
         return
@@ -74,11 +74,11 @@ create_user() {
     echo ""
     read -p "Choose option: " choice
 
-    cd /var/www/pterodactyl || exit
+    cd /var/www/paymenter || exit
 
     if [ "$choice" = "1" ]; then
         status_msg "WAIT" "Launching manual user creation..."
-        php artisan p:user:make
+        php artisan app:user:create
 
     elif [ "$choice" = "2" ]; then
         status_msg "WAIT" "Creating auto admin user..."
@@ -88,17 +88,17 @@ create_user() {
         EMAIL="$(openssl rand -base64 4)@email.com"
         FIRST="$(openssl rand -base64 6)"
         LAST="$(openssl rand -base64 4)"
-        php artisan p:user:make -n \
-            --email=${EMAIL} \
-            --username=${USERNAME} \
-            --password=${PASSWORD} \
-            --admin=1 \
-            --name-first=${FIRST} \
-            --name-last=${LAST}
+        php artisan tinker --execute="\App\Models\User::create([
+        'first_name'=>'$FIRST',
+        'last_name'=>'$LAST',
+        'email'=>'$EMAIL',
+        'password'=>bcrypt('$PASSWORD'),
+        'role_id'=>1,
+        'is_admin'=>1
+        ]);"
 
         echo ""
         status_msg "OK" "Auto User Created!"
-        echo "Username: $USERNAME"
         echo "Password: $PASSWORD"
         echo "Email:    $EMAIL"
     else
@@ -110,9 +110,9 @@ create_user() {
 # ================= PANEL UNINSTALL =================
 uninstall_logic() {
     status_msg "WAIT" "Stopping Panel services..."
-    systemctl stop pteroq.service 2>/dev/null || true
-    systemctl disable pteroq.service 2>/dev/null || true
-    rm -f /etc/systemd/system/pteroq.service
+    systemctl stop paymenter.service 2>/dev/null || true
+    systemctl disable paymenter.service 2>/dev/null || true
+    rm -f /etc/systemd/system/paymenter.service
     systemctl daemon-reload
 
     status_msg "WAIT" "Removing cronjobs..."
@@ -162,24 +162,21 @@ update_panel() {
     fi
 
     status_msg "INFO" "Putting panel into Maintenance Mode..."
-    cd /var/www/pterodactyl
+    cd /var/www/paymenter
     php artisan down
-    sudo rm -rf /var/www/pterodactyl/*
-    cd /var/www/pterodactyl
+    cd /var/www/paymenter
     status_msg "INFO" "Downloading latest release..."
-    curl -Lo panel.tar.gz https://github.com/pterodactyl/panel/releases/latest/download/panel.tar.gz
-    tar -xzvf panel.tar.gz
+    curl -L https://github.com/paymenter/paymenter/releases/latest/download/paymenter.tar.gz | tar -xz
     status_msg "INFO" "Setting permissions..."
     chmod -R 755 storage/* bootstrap/cache/
-
+    php artisan migrate --force --seed
     status_msg "INFO" "Updating Composer dependencies..."
     COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader
     
     status_msg "INFO" "Clearing cache and database migration..."
     php artisan view:clear
     php artisan config:clear
-    php artisan migrate --seed --force
-    chown -R www-data:www-data /var/www/pterodactyl/*
+    chown -R www-data:www-data /var/www/paymenter/*
     
     status_msg "INFO" "Restarting Queue Workers..."
     php artisan queue:restart
