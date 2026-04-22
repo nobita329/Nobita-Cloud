@@ -45,7 +45,9 @@ names=(
 "serverimporter.blueprint" "pstatistics.blueprint"
 "simplefooters.blueprint" "pullfiles.blueprint"
 "serverpropsmanager.blueprint" "motdmaker.blueprint"
-"servericonimporter.blueprint" ""
+"servericonimporter.blueprint" "sagaautosuspension.blueprint"
+"sagaminecraftmodpackinstaller.blueprint" "blueannoucements.blueprint"
+"trashbin.blueprint" "eggchanger.blueprint"
 )
 
 # ==========================================
