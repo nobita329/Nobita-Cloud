@@ -166,7 +166,7 @@ while true; do
   echo -e " ${BW}SELECTED:${N} ${BC}$clean_name${N}"
   echo -e " ${BW}STATUS:${N}   $cur_status"
   echo -e "${C} ──────────────────────────────────────────────────────────${N}"
-  echo -e "  ${BG}[ 1 ]${N} Install / Update"
+  echo -e "  ${BG}[ 1 ]${N} Install"
   echo -e "  ${BR}[ 2 ]${N} Uninstall"
   echo -e "  ${BY}[ 0 ]${N} Back to Menu"
   echo -e "${C} ──────────────────────────────────────────────────────────${N}"
