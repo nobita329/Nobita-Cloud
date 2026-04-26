@@ -48,9 +48,6 @@ apt update
 echo "⚡ Installing PHP 8.2..."
 apt install -y php8.2 php8.2-{common,cli,gd,mysql,mbstring,bcmath,xml,fpm,curl,zip}
 
-# MariaDB setup
-echo "🛢️ Setting up MariaDB repo..."
-curl -sS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
 
 # Install stack
 echo "🌐 Installing full stack..."
