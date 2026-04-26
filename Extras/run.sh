@@ -17,7 +17,7 @@ infra_menu() {
   while true; do
     clear
     echo -e "${GRAY}────────────── INFRA MENU ──────────────${NC}"
-    echo -e "${CYAN} 1) KVM + Cockpit"
+    echo -e "${CYAN} 1) Cockpit"
     echo -e " 2) CasaOS"
     echo -e " 3) 1Panel"
     echo -e " 4) LXC/LXD"
@@ -30,33 +30,33 @@ infra_menu() {
       1)
         clear
         echo -e "${CYAN}Installing KVM + Cockpit...${NC}"
-        bash <(curl -fsSL https://raw.githubusercontent.com/nobita329/The-Coding-Hub/main/srv/External/Cockpit.sh)
+        bash <(curl -fsSL $URL/Cockpit.sh)
         echo -e "${GREEN}Access: https://SERVER_IP:9090${NC}"
         pause
         ;;
       2)
         clear
         echo -e "${CYAN}Installing CasaOS...${NC}"
-        bash <(curl -fsSL https://raw.githubusercontent.com/nobita329/The-Coding-Hub/main/srv/External/casaos.sh)
+        bash <(curl -fsSL $URL/casaos.sh)
         pause
         ;;
       3)
         clear
         echo -e "${CYAN}Installing 1Panel...${NC}"
-        bash <(curl -fsSL https://raw.githubusercontent.com/nobita329/The-Coding-Hub/main/srv/External/1panel.sh)
+        bash <(curl -fsSL $URL/cpanel.sh)
         pause
         ;;
       4)
         clear
         echo -e "${CYAN}Installing  LXC/LXD...${NC}"
         sudo usermod -aG lxd root
-        bash <(curl -fsSL https://raw.githubusercontent.com/nobita329/The-Coding-Hub/main/srv/External/lxc.sh)
+        bash <(curl -fsSL $URL/Cockpit.sh)
         pause
         ;;
       5)
         clear
-        echo -e "${CYAN}Installing  LXC/LXD...${NC}"
-        bash <(curl -fsSL https://raw.githubusercontent.com/nobita329/The-Coding-Hub/refs/heads/main/srv/External/doc.sh)
+        echo -e "${CYAN}Installing  docker...${NC}"
+        bash <(curl -fsSL $URL/docker.sh)
         pause
         ;;
       6)
