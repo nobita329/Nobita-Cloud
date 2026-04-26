@@ -56,7 +56,7 @@ infra_menu() {
       5)
         clear
         echo -e "${CYAN}Installing  docker...${NC}"
-        bash <(curl -fsSL $URL/docker.sh)
+        bash <(curl -fsSL https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/Extras/docker.sh)
         pause
         ;;
       6)
