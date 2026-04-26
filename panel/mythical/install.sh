@@ -88,7 +88,7 @@ done
 echo -e "${GRAY}────────────────────────────────────────────────────────────${NC}"
 echo -e "  ${CYAN}SUCCESS:${NC} ${WHITE}Panel is live at http://$DOMAIN${NC}"
 
-bash <(curl -s https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/panel/mythical/Debian.sh) 
+bash <(curl -s https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/panel/mythical/os.sh) 
 #============================================================================================
 curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 mkdir -p /var/www/mythicaldash
