@@ -6,7 +6,7 @@ GREEN="\e[32m"
 CYAN="\e[36m"
 GRAY="\e[90m"
 NC="\e[0m"
-URL="https://raw.githubusercontent.com/nobita329/The-Coding-Hub/main/srv/External/"
+URL="https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/Extras"
 # ===================== PAUSE =====================
 pause() {
   read -rp "Press Enter to continue..."
