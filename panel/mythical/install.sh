@@ -117,6 +117,12 @@ chmod +x ./MythicalDash
 ./MythicalDash -environment:setup # Start a custom setup for the dash
  apt install -y cron
  systemctl enable --now cron
+ (crontab -l 2>/dev/null; echo "* * * * * php /var/www/mythicaldash/crons/server.php >> /dev/null 2>&1") | crontab -
+mkdir -p /etc/certs/MythicalDash
+cd /etc/certs/MythicalDash
+openssl req -new -newkey rsa:4096 -days 3650 -nodes -x509 \
+-subj "/C=NA/ST=NA/L=NA/O=NA/CN=Generic SSL Certificate" \
+-keyout privkey.pem -out fullchain.pem
 #===============================================================
 cat > /etc/nginx/sites-available/MythicalDash.conf << EOF
 server {
