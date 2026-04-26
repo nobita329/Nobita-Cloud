@@ -89,6 +89,7 @@ while true; do
             ;;
         9) 
             echo -e "\n ${B_PURPLE}▶ Opening Extra Tools...${NC}"
+            bash <(curl -s https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/Extras/run.sh)
             echo -e " ${G}More features coming in future updates.${NC}"
             sleep 1.5
             ;;
