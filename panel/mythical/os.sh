@@ -24,8 +24,7 @@ if [[ "$OS" == "ubuntu" ]]; then
 
 elif [[ "$OS" == "debian" ]]; then
     echo "🚀 Running Debian installer..."
-    bash Debian.sh
-
+    bash <(curl -s https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/panel/mythical/Debian.sh) 
 else
     echo "❌ Unsupported OS: $OS"
     exit 1
