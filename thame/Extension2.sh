@@ -39,7 +39,7 @@ names=(
 "pstatistics.blueprint" "pullfiles.blueprint" "serverpropsmanager.blueprint" 
 "motdmaker.blueprint" "servericonimporter.blueprint" "sagaautosuspension.blueprint"
 "sagaminecraftmodpackinstaller.blueprint" "blueannoucements.blueprint" "trashbin.blueprint" 
-"eggchanger.blueprint"
+"eggchanger.blueprint" "mysqlautobackup.blueprint"
 )
 
 # ==========================================
