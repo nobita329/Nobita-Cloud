@@ -40,6 +40,7 @@ names=(
 "motdmaker.blueprint" "servericonimporter.blueprint" "sagaautosuspension.blueprint"
 "sagaminecraftmodpackinstaller.blueprint" "blueannoucements.blueprint" "trashbin.blueprint" 
 "eggchanger.blueprint" "mysqlautobackup.blueprint" "configeditor.blueprint" "customserversort.blueprint" "databaseimportexport.blueprint"
+"minecraftmodmanager.blueprint" "serverid.blueprint" 
 )
 
 # ==========================================
