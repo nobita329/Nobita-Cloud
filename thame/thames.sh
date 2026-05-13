@@ -32,7 +32,7 @@ names=(
 "recolor.blueprint" "bluetables.blueprint"
 "ultradarkadmin.blueprint" "xlpaneltheme.blueprint"
 "lememtheme.blueprint" "slate.blueprint"
-"kaelixprime.blueprint"
+"kaelixprime.blueprint" "m3dactyl.blueprint"
 )
 
 # ==========================================
