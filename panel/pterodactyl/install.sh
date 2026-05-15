@@ -248,17 +248,16 @@ sed -i 's|MAIL_FROM_NAME=.*|MAIL_FROM_NAME="Nobita Cloud"|g' .env
 php artisan p:location:make --short=IN --long="India"
 # ---------------- DONE ----------------
 php artisan down
-curl -Lo panel.tar.gz https://github.com/pterodactyl/panel/releases/latest/download/panel.tar.gz
-tar -xzvf panel.tar.gz
+curl -L https://github.com/pterodactyl/panel/releases/latest/download/panel.tar.gz | tar -xzv
 chmod -R 755 storage/* bootstrap/cache
 COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader
+php artisan migrate --seed --force
 php artisan view:clear
 php artisan config:clear
 php artisan config:clear
 php artisan cache:clear
 php artisan view:clear
 php artisan config:cache
-php artisan migrate --seed --force
 chown -R www-data:www-data /var/www/pterodactyl/*
 php artisan queue:restart
 php artisan up
