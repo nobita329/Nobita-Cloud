@@ -54,7 +54,7 @@ ask() {
 show_banner
 
 # --- DATA COLLECTION ---
-ask "Panel Domain" "panel.kavo.dpdns.org" DOMAIN
+ask "Panel Domain" "panel.nobita.indevs.in" DOMAIN
 ask "Admin Email" "admin@gmail.com" EMAIL
 ask "Admin Username" "admin" USERNAME
 ask "Admin Password" "admin" PASSWORD
