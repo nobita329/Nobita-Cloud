@@ -19,10 +19,10 @@ echo ""
 echo -e "${BOLD}Select Configuration Mode:${NC}"
 echo -e "  ${GREEN}[1]${NC} SSL / HTTPS ${YELLOW}(Secure)${NC}"
 echo -e "  ${RED}[2]${NC} No SSL / HTTP ${YELLOW}(Insecure)${NC}"
-echo -e "  ${RED}[2]${NC} CREATE / HTTP/HTTPS ${YELLOW}(Insecure)${NC}"
+echo -e "  ${RED}[3]${NC} CREATE / HTTP/HTTPS ${YELLOW}(Insecure)${NC}"
 \
 echo ""
-read -p "Select option [1-2]: " OPTION
+read -p "Select option [1-3]: " OPTION
 
 echo ""
 echo -e "${CYAN}--- Configuration Details ---${NC}"
