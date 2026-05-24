@@ -42,11 +42,8 @@ systemctl restart php8.4-fpm
 rm -rf /tmp/ioncube /tmp/ioncube.tar.gz
 
 echo ">>> Setting up database..."
-mysql -e "CREATE DATABASE IF NOT EXISTS $DB_NAME CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-mysql -e "CREATE USER IF NOT EXISTS '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';"
-mysql -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'localhost';"
-mysql -e "FLUSH PRIVILEGES;"
-
+DB_PASS='yourPassword' && mariadb -e "CREATE DATABASE IF NOT EXISTS panel; CREATE USER IF NOT EXISTS 'pterodactyl'@'localhost' IDENTIFIED BY '$DB_PASS'; CREATE USER IF NOT EXISTS 'pterodactyl'@'127.0.0.1' IDENTIFIED BY '$DB_PASS'; GRANT ALL PRIVILEGES ON panel.* TO 'pterodactyl'@'localhost'; GRANT ALL PRIVILEGES ON panel.* TO 'pterodactyl'@'127.0.0.1'; FLUSH PRIVILEGES;"
+(crontab -l 2>/dev/null; echo "*/5 * * * * /usr/bin/php -q /var/www/whmcs/crons/cron.php") | crontab -
 mkdir -p "$WEBROOT"
 
 echo ">>> Downloading WHMCS..."
