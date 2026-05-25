@@ -75,9 +75,9 @@ show_banner
 
 # --- DATA COLLECTION ---
 ask "Panel Domain" "phpmyadmin.nobita.indevs.in" DOMAIN
-ask "Admin Email" "admin@gmail.com" DB_NAME
-ask "Admin Username" "admin" DB_USER
-ask "Admin Password" "admin" DB_PASS
+ask "Admin Name"   "phpmyadmin" DB_NAME
+ask "Admin User"   "phpmyadmin" DB_USER
+ask "Admin Pass"   "phpmyadmin" DB_PASS
 
 
 # --- FINAL VALIDATION LOOP ---
