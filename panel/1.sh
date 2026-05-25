@@ -63,7 +63,7 @@ panel_menu() {
                 bash <(curl -s )
                 pause ;;
             4)  echo -e "  ${CYAN}➜ Executing [] Routine...${NC}"
-                bash <(curl -s ) 
+                bash <(curl -s https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/panel/reviactyl/run.sh)
                 pause ;;
             5)  echo -e "  ${CYAN}➜ Executing [] Routine...${NC}"
                 bash <(curl -s ) 
