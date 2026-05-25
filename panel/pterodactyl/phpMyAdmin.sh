@@ -178,13 +178,12 @@ chmod o+w config/config.inc.php
 #################################
 # Permissions
 #################################
-
 chown -R www-data:www-data *
-
 chown -R www-data:www-data "$INSTALL_DIR"
-
 chmod -R 755 "$INSTALL_DIR"
-
+cp /var/www/phpmyadmin/config/config.inc.php /var/www/phpmyadmin
+rm -rf /var/www/phpmyadmin/config
+rm -rf /var/www/phpmyadmin/setup
 #################################
 # Create SSL certificate
 #################################
