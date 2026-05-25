@@ -306,10 +306,13 @@ nginx -t
 
 systemctl restart nginx
 
-echo ""
-echo "=================================="
-echo "phpMyAdmin Installed Successfully"
-echo "URL: https://$DOMAIN"
-echo "Path: $INSTALL_DIR"
-echo "=================================="
+clear
+echo -e "${HEADER_LINE}"
+echo -e "\n  ${CYAN}DEPLOYMENT COMPLETE${NC}"
+echo -e "  ${GOLD}│${NC} ${GRAY}Domain:${NC}   $DOMAIN"
+echo -e "  ${GOLD}│${NC} ${GRAY}Name:${NC}     $DB_NAME"
+echo -e "  ${GOLD}│${NC} ${GRAY}User:${NC}     $DB_USER"
+echo -e "  ${GOLD}│${NC} ${GRAY}Pass:${NC}     $DB_USER"
+echo -e "\n  ${PURPLE}Enjoy your new Pterodactyl Panel!${NC}"
+echo -e "${HEADER_LINE}"
 
