@@ -222,12 +222,15 @@ while true; do
     clear
     
     # Banner
-    echo -e "${PURPLE}  ____  _                     _            _         _ ${NC}"
-    echo -e "${PURPLE} |  _ \| |_ ___ _ __ ___   __| | __ _  ___| |_ _   _| |${NC}"
-    echo -e "${PURPLE} | |_) | __/ _ \ '__/ _ \ / _\` |/ _\` |/ __| __| | | | |${NC}"
-    echo -e "${PURPLE} |  __/| ||  __/ | | (_) | (_| | (_| | (__| |_| |_| | |${NC}"
-    echo -e "${PURPLE} |_|    \__\___|_|  \___/ \__,_|\__,_|\___|\__|\__, |_|${NC}"
-    echo -e "${PURPLE}                                               |___/   ${NC}"
+echo -e "${PURPLE}ooooooooo.                          o8o                          .               oooo  ${NC}"
+echo -e "${PURPLE}\`888   \`Y88.                        \`\"'                        .o8               \`888  ${NC}"
+echo -e "${PURPLE} 888   .d88'  .ooooo.  oooo    ooo oooo   .oooo.    .ooooo.  .o888oo oooo    ooo  888  ${NC}"
+echo -e "${PURPLE} 888ooo88P'  d88' \`88b  \`88.  .8'  \`888  \`P  )88b  d88' \`\"Y8   888    \`88.  .8'   888  ${NC}"
+echo -e "${PURPLE} 888\`88b.    888ooo888   \`88..8'    888   .oP\"888  888         888     \`88..8'    888  ${NC}"
+echo -e "${PURPLE} 888  \`88b.  888    .o    \`888'     888  d8(  888  888   .o8   888 .    \`888'     888  ${NC}"
+echo -e "${PURPLE}o888o  o888o \`Y8bod8P'     \`8'     o888o \`Y888\"\"8o \`Y8bod8P'   \"888\"     .8'     o888o ${NC}"
+echo -e "${PURPLE}                                                                     .o..P'            ${NC}"
+echo -e "${PURPLE}                                                                     \`Y8P'              ${NC}"
     echo -e ""
     
     echo -e "${CYAN} ┌───────────────────────────────────────────────────────┐${NC}"
