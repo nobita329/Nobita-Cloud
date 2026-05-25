@@ -75,6 +75,9 @@ show_banner
 
 # --- DATA COLLECTION ---
 ask "Panel Domain" "phpmyadmin.nobita.indevs.in" DOMAIN
+ask "Admin Email" "admin@gmail.com" EMAIL
+ask "Admin Username" "admin" USERNAME
+ask "Admin Password" "admin" PASSWORD
 
 
 # --- FINAL VALIDATION LOOP ---
@@ -184,6 +187,8 @@ chmod -R 755 "$INSTALL_DIR"
 cp /var/www/phpmyadmin/config/config.inc.php /var/www/phpmyadmin
 rm -rf /var/www/phpmyadmin/config
 rm -rf /var/www/phpmyadmin/setup
+
+
 #################################
 # Create SSL certificate
 #################################
