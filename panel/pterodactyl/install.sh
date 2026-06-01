@@ -367,7 +367,7 @@ php artisan p:user:make -n --email="$EMAIL" --username="${USERNAME}" --password=
 clear
 echo -e "${HEADER_LINE}"
 echo -e "\n  ${CYAN}DEPLOYMENT COMPLETE${NC}"
-echo -e "  ${GRAY}Panel URL :${NC} ${WHITE}https://$DOMAIN${NC}"auto test
+echo -e "  ${GRAY}Panel URL :${NC} ${WHITE}https://$DOMAIN${NC}"
 echo -e "  ${GRAY}Username  :${NC} ${WHITE}$USERNAME${NC}"
 echo -e "  ${GRAY}Password  :${NC} ${WHITE}$PASSWORD${NC}"
 echo -e "  ${GRAY}Email     :${NC} ${WHITE}$EMAIL${NC}"
