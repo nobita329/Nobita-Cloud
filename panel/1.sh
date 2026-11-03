@@ -60,7 +60,7 @@ panel_menu() {
                 bash <(curl -s https://raw.githubusercontent.com/nobita329/NobitaHost/refs/heads/main/panel/NovaStudio/run.sh) 
                 pause ;;
             3)  echo -e "  ${CYAN}➜ Executing [] Routine...${NC}"
-                bash <(curl -s https://raw.githubusercontent.com/nobita329/Nobita-Cloud/raw/refs/heads/main/panel/pterodactyl/run.sh)
+                bash <(curl -s https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/panel/pterodactyl/run.sh)
                 pause ;;
             4)  echo -e "  ${CYAN}➜ Executing [] Routine...${NC}"
                 bash <(curl -s https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/panel/reviactyl/run.sh)
