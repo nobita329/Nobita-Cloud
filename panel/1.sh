@@ -72,7 +72,7 @@ panel_menu() {
                 bash <(curl -s https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/panel/paymenter/run.sh) 
                 pause ;;
             7)  echo -e "  ${CYAN}➜ Executing Convoy Routine...${NC}"
-                bash <(curl -s https://raw.githubusercontent.com/nobita329/Codes/raw/refs/heads/main/panel/pterodactyl/runv2.sh) 
+                bash <(curl -s https://raw.githubusercontent.com/nobita329/Codes/refs/heads/main/panel/pterodactyl/runv2.sh) 
                 pause ;;
             8)  echo -e "  ${CYAN}➜ Executing [] Routine...${NC}"
                 bash <(curl -s ) 
