@@ -43,7 +43,7 @@ panel_menu() {
         echo -e "  ${GRAY}┌──────────────────────────┬──────────────────────────┐${NC}"
         echo -e "  ${GRAY}│${NC} ${PURPLE}[1]${NC} Pterodactyl v1x      ${GRAY}│${NC} ${PURPLE}[7]${NC}  Pterodactyl v2x      ${GRAY}│${NC}"
         echo -e "  ${GRAY}│${NC} ${PURPLE}[2]${NC} NovaStudio           ${GRAY}│${NC} ${PURPLE}[8]${NC}  soon                 ${GRAY}│${NC}"
-        echo -e "  ${GRAY}│${NC} ${PURPLE}[3]${NC} soon                 ${GRAY}│${NC} ${PURPLE}[9]${NC}  soon                 ${GRAY}│${NC}"
+        echo -e "  ${GRAY}│${NC} ${PURPLE}[3]${NC} Ptro old             ${GRAY}│${NC} ${PURPLE}[9]${NC}  soon                 ${GRAY}│${NC}"
         echo -e "  ${GRAY}│${NC} ${PURPLE}[4]${NC} soon                 ${GRAY}│${NC} ${PURPLE}[10]${NC} soon                 ${GRAY}│${NC}"
         echo -e "  ${GRAY}│${NC} ${PURPLE}[5]${NC} soon                 ${GRAY}│${NC} ${PURPLE}[11]${NC} soon                 ${GRAY}│${NC}"
         echo -e "  ${GRAY}│${NC} ${PURPLE}[6]${NC} Paymenter            ${GRAY}│${NC} ${RED}[0]${NC} Exit                 ${GRAY}│${NC}"
@@ -60,7 +60,7 @@ panel_menu() {
                 bash <(curl -s https://raw.githubusercontent.com/nobita329/NobitaHost/refs/heads/main/panel/NovaStudio/run.sh) 
                 pause ;;
             3)  echo -e "  ${CYAN}➜ Executing [] Routine...${NC}"
-                bash <(curl -s )
+                bash <(curl -s https://github.com/nobita329/Nobita-Cloud/raw/refs/heads/main/panel/pterodactyl/run.sh)
                 pause ;;
             4)  echo -e "  ${CYAN}➜ Executing [] Routine...${NC}"
                 bash <(curl -s https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/panel/reviactyl/run.sh)
