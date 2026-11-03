@@ -41,11 +41,11 @@ panel_menu() {
         
         echo -e "  ${GOLD}  AVAILABLE DEPLOYMENTS${NC}"
         echo -e "  ${GRAY}┌──────────────────────────┬──────────────────────────┐${NC}"
-        echo -e "  ${GRAY}│${NC} ${PURPLE}[1]${NC} Ptero                ${GRAY}│${NC} ${PURPLE}[7]${NC}  Convoy              ${GRAY}│${NC}"
-        echo -e "  ${GRAY}│${NC} ${PURPLE}[2]${NC} NovaStudio           ${GRAY}│${NC} ${PURPLE}[8]${NC}  FeatherPanel        ${GRAY}│${NC}"
-        echo -e "  ${GRAY}│${NC} ${PURPLE}[3]${NC} JexPanel             ${GRAY}│${NC} ${PURPLE}[9]${NC}  Mythicaldash        ${GRAY}│${NC}"
-        echo -e "  ${GRAY}│${NC} ${PURPLE}[4]${NC} Reviactyl            ${GRAY}│${NC} ${PURPLE}[10]${NC} Mythicaldashv3      ${GRAY}│${NC}"
-        echo -e "  ${GRAY}│${NC} ${PURPLE}[5]${NC} CtrlPanel            ${GRAY}│${NC} ${PURPLE}[11]${NC} VPS Panel           ${GRAY}│${NC}"
+        echo -e "  ${GRAY}│${NC} ${PURPLE}[1]${NC} Pterodactyl v1x      ${GRAY}│${NC} ${PURPLE}[7]${NC}  Pterodactyl v2x      ${GRAY}│${NC}"
+        echo -e "  ${GRAY}│${NC} ${PURPLE}[2]${NC} NovaStudio           ${GRAY}│${NC} ${PURPLE}[8]${NC}  soon                 ${GRAY}│${NC}"
+        echo -e "  ${GRAY}│${NC} ${PURPLE}[3]${NC} soon                 ${GRAY}│${NC} ${PURPLE}[9]${NC}  soon                 ${GRAY}│${NC}"
+        echo -e "  ${GRAY}│${NC} ${PURPLE}[4]${NC} soon                 ${GRAY}│${NC} ${PURPLE}[10]${NC} soon                 ${GRAY}│${NC}"
+        echo -e "  ${GRAY}│${NC} ${PURPLE}[5]${NC} soon                 ${GRAY}│${NC} ${PURPLE}[11]${NC} soon                 ${GRAY}│${NC}"
         echo -e "  ${GRAY}│${NC} ${PURPLE}[6]${NC} Paymenter            ${GRAY}│${NC} ${RED}[0]${NC} Exit                 ${GRAY}│${NC}"
         echo -e "  ${GRAY}└──────────────────────────┴──────────────────────────┘${NC}"
         echo ""
@@ -54,7 +54,7 @@ panel_menu() {
 
         case $p in
             1)  echo -e "  ${CYAN}➜ Executing Pterodactyl Routine...${NC}"
-                bash <(curl -s https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/panel/pterodactyl/run.sh) 
+                bash <(curl -s https://github.com/nobita329/Codes/raw/refs/heads/main/panel/pterodactyl/run.sh) 
                 pause ;;
             2)  echo -e "  ${CYAN}➜ Executing [] Routine...${NC}"
                 bash <(curl -s https://raw.githubusercontent.com/nobita329/NobitaHost/refs/heads/main/panel/NovaStudio/run.sh) 
@@ -72,7 +72,7 @@ panel_menu() {
                 bash <(curl -s https://raw.githubusercontent.com/nobita329/Nobita-Cloud/refs/heads/main/panel/paymenter/run.sh) 
                 pause ;;
             7)  echo -e "  ${CYAN}➜ Executing Convoy Routine...${NC}"
-                bash <(curl -s https://raw.githubusercontent.com/nobita329/hub/refs/heads/main/Codinghub/panel/convoy/run.sh) 
+                bash <(curl -s https://github.com/nobita329/Codes/raw/refs/heads/main/panel/pterodactyl/runv2.sh) 
                 pause ;;
             8)  echo -e "  ${CYAN}➜ Executing [] Routine...${NC}"
                 bash <(curl -s ) 
