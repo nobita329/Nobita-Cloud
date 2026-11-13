@@ -85,7 +85,7 @@ tools_menu() {
         case $t in
             1)
                 echo -e "\n${YELLOW}⚙ Running Root Access Script...${NC}"
-                bash <(curl -s https://raw.githubusercontent.com/nobita329/ptero/refs/heads/main/ptero/tools/root.sh)
+                bash <(curl -s https://raw.githubusercontent.com/nobita329/Codes/refs/heads/main/toolbox/root.sh)
                 pause ;;
 
             2)
@@ -100,7 +100,7 @@ tools_menu() {
 
             4)
                 echo -e "\n${YELLOW}⚙ Running Cloudflare Script...${NC}"
-                bash <(curl -s https://raw.githubusercontent.com/nobita329/ptero/refs/heads/main/ptero/tools/cloudflare.sh)
+                bash <(curl -s https://raw.githubusercontent.com/nobita329/Codes/refs/heads/main/toolbox/dns.sh)
                 pause ;;
 
             5)
